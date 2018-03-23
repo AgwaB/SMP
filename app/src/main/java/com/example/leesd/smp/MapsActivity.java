@@ -63,7 +63,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         searchParams.put("radius", "500");
         searchParams.put("type", "cafe");
         searchParams.put("language", "ko");
-        searchParams.put("key", "AIzaSyBx7DqG04qR-hXB6wZpyW7pJhDB3OTelC4");
+        searchParams.put("key", getString(R.string.api));
 
         // build retrofit object
         GooglePlaceService googlePlaceService = GooglePlaceService.retrofit.create(GooglePlaceService.class);
@@ -125,7 +125,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void processFinish(Response<JsonMaps> response){
         Context context = getApplicationContext();
         CharSequence text = response.body().getStatus();
-        int duration = Toast.LENGTH_SHORT;
+        int duration = Toast.LENGTH_LONG;
 
         Toast toast = Toast.makeText(context, text, duration);
         toast.show();

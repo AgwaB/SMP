@@ -31,12 +31,13 @@ public class GoogleMapsNetworkCall extends AsyncTask<Call, Void, Response<JsonMa
 
         return null;
     }
+
+
     @Override
     protected void onPostExecute(Response<JsonMaps> response){
         // call if doInBackground returns response or null
 
-        // ListViewActivity에서 response(검색결과물)을 매개변수로 받아서 실행
-        // 원래 activity에서는 background단에서 결과물을 바로 받을 수 없음
+        // send a response object to activity
         delegate.processFinish(response);
     }
 }
