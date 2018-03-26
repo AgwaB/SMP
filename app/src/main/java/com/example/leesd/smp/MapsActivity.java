@@ -56,29 +56,29 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.googleMap);
         mapFragment.getMapAsync(this);
 
-        // add params to HashMap
-        searchParams = new HashMap<String, String>();
-
-        searchParams.put("location", Double.toString(37.56) + "," + Double.toString(126.97));
-        searchParams.put("radius", "500");
-        searchParams.put("type", "cafe");
-        searchParams.put("language", "ko");
-        searchParams.put("key", getString(R.string.api));
-
-        // build retrofit object
-        GooglePlaceService googlePlaceService = GooglePlaceService.retrofit.create(GooglePlaceService.class);
-
-        // call GET request with category and HashMap params
-        final Call<JsonMaps> call = googlePlaceService.getPlaces("nearbysearch", searchParams);
-
-        // make a thread for http communication
-        GoogleMapsNetworkCall n = new GoogleMapsNetworkCall();
-
-        // set delegate for receiving response object
-        n.delegate = MapsActivity.this;
-
-        // execute background service
-        n.execute(call);
+//        // add params to HashMap
+//        searchParams = new HashMap<String, String>();
+//
+//        searchParams.put("location", Double.toString(37.56) + "," + Double.toString(126.97));
+//        searchParams.put("radius", "500");
+//        searchParams.put("type", "cafe");
+//        searchParams.put("language", "ko");
+//        searchParams.put("key", getString(R.string.placesKey));
+//
+//        // build retrofit object
+//        GooglePlaceService googlePlaceService = GooglePlaceService.retrofit.create(GooglePlaceService.class);
+//
+//        // call GET request with category and HashMap params
+//        final Call<JsonMaps> call = googlePlaceService.getPlaces("nearbysearch", searchParams);
+//
+//        // make a thread for http communication
+//        GoogleMapsNetworkCall n = new GoogleMapsNetworkCall();
+//
+//        // set delegate for receiving response object
+//        n.delegate = MapsActivity.this;
+//
+//        // execute background service
+//        n.execute(call);
 
         // fragment load
         Fragment fr = new RecoFragment();
