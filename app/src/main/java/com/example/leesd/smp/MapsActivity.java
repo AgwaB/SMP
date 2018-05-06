@@ -4,9 +4,9 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -17,14 +17,12 @@ import com.example.leesd.smp.RetrofitCall.GooglePlaceService;
 import com.example.leesd.smp.googlemaps.JsonMaps;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.HashMap;
-import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Response;
@@ -56,29 +54,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.googleMap);
         mapFragment.getMapAsync(this);
 
-        // add params to HashMap
-        searchParams = new HashMap<String, String>();
-
-        searchParams.put("location", Double.toString(37.56) + "," + Double.toString(126.97));
-        searchParams.put("radius", "500");
-        searchParams.put("type", "cafe");
-        searchParams.put("language", "ko");
-        searchParams.put("key", getString(R.string.api));
-
-        // build retrofit object
-        GooglePlaceService googlePlaceService = GooglePlaceService.retrofit.create(GooglePlaceService.class);
-
-        // call GET request with category and HashMap params
-        final Call<JsonMaps> call = googlePlaceService.getPlaces("nearbysearch", searchParams);
-
-        // make a thread for http communication
-        GoogleMapsNetworkCall n = new GoogleMapsNetworkCall();
-
-        // set delegate for receiving response object
-        n.delegate = MapsActivity.this;
-
-        // execute background service
-        n.execute(call);
 
         // fragment load
         Fragment fr = new RecoFragment();

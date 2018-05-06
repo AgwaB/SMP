@@ -16,14 +16,14 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyADOPYOAk11b7Q8f6RMPhNgYxsfL7t9DeU" />
 
-        <activity android:name=".MapsActivity">
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity"></activity>
+        <activity android:name=".MapsActivity"></activity>
     </application>
 
 </manifest>
