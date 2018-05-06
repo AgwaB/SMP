@@ -1,29 +1,30 @@
 package com.example.leesd.smp;
 
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 
 /**
  * Created by leesd on 2018-03-23.
  */
 
 public class ListViewItem {
-    private Drawable iconDrawble;
+    private String iconDrawbleUrl;
     private String title;
     private String address;
 
     public ListViewItem(){}
-    public ListViewItem(Drawable iconDrawble, String title, String address) {
-        this.iconDrawble = iconDrawble;
+    public ListViewItem(String iconDrawbleUrl, String title, String address) {
+        this.iconDrawbleUrl = iconDrawbleUrl;
         this.title = title;
         this.address = address;
     }
 
-    public Drawable getIcon() {
-        return iconDrawble;
+    public String getIcon() {
+        return iconDrawbleUrl;
     }
 
-    public void setIcon(Drawable iconDrawble) {
-        this.iconDrawble = iconDrawble;
+    public void setIcon(String iconDrawble) {
+        this.iconDrawbleUrl = iconDrawble;
     }
 
     public String getTitle() {
