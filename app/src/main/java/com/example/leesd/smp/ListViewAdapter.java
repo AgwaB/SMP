@@ -1,15 +1,19 @@
 package com.example.leesd.smp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.leesd.smp.googlemaps.JsonMaps;
+import com.example.leesd.smp.googlemaps.Result;
 
 import java.util.ArrayList;
 
@@ -17,13 +21,20 @@ import java.util.ArrayList;
  * Created by leesd on 2018-03-23.
  */
 
-public class ListViewAdapter extends BaseAdapter {
+public class ListViewAdapter extends BaseAdapter{
+
     // Adapter에 추가된 데이터를 저장하기 위한 ArrayList
     private ArrayList<ListViewItem> listViewItemList = new ArrayList<ListViewItem>() ;
+
+    // DetailFragment에서 retrofit 통신 후 data를 받아오면 adapter에도 그 값을 넘겨 준다. (listview 내부의 button 클릭 시 data를 넘겨주기 위해)
+    private Result jsonResult;
 
     // ListViewAdapter의 생성자
     public ListViewAdapter() {
 
+    }
+    public void setJsonResult(Result jsonResult){ // list 각각의 데이터를 가져 오려고 만듬(JsonMap는 Result의 set)
+        this.jsonResult = jsonResult;
     }
 
     // Adapter에 사용되는 데이터의 개수를 리턴. : 필수 구현
@@ -34,7 +45,7 @@ public class ListViewAdapter extends BaseAdapter {
 
     // position에 위치한 데이터를 화면에 출력하는데 사용될 View를 리턴. : 필수 구현
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         final int pos = position;
         final Context context = parent.getContext();
 
@@ -48,14 +59,25 @@ public class ListViewAdapter extends BaseAdapter {
         ImageView iconImageView = (ImageView) convertView.findViewById(R.id.item_icon) ;
         TextView titleTextView = (TextView) convertView.findViewById(R.id.item_title) ;
         TextView addressTextView = (TextView) convertView.findViewById(R.id.item_address) ;
+        Button detailButton = (Button) convertView.findViewById(R.id.IDdetailInfo);
 
         // Data Set(listViewItemList)에서 position에 위치한 데이터 참조 획득
-        ListViewItem listViewItem = listViewItemList.get(position);
+        final ListViewItem listViewItem = listViewItemList.get(position);
 
         // 아이템 내 각 위젯에 데이터 반영
         Glide.with(context).load(listViewItem.getIcon()).into(iconImageView); // Glide로 URI->Drawble 변형
         titleTextView.setText(listViewItem.getTitle());
         addressTextView.setText(listViewItem.getAddress());
+        detailButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) { // list 클릭시 , 해당 item 정보를 detailActivity로 넘겨준다.
+                Intent intent = new Intent(context, DetailInfoActivity.class);
+                intent.putExtra("position", position);
+                intent.putExtra("positionItem", listViewItem);
+                intent.putExtra("jsonResult", jsonResult);
+                context.startActivity(intent);
+            }
+        });
 
         return convertView;
     }
@@ -82,5 +104,6 @@ public class ListViewAdapter extends BaseAdapter {
 
         listViewItemList.add(item);
     }
+
 
 }

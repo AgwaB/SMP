@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 
 import com.example.leesd.smp.RetrofitCall.AsyncResponseMaps;
@@ -34,9 +35,9 @@ import retrofit2.Response;
  */
 
 public class DetailFragment extends Fragment implements AsyncResponseMaps {
-    ListView listview ;
-    ListViewAdapter adapter;
-    JsonMaps jsonMaps;
+    private ListView listview ;
+    private ListViewAdapter adapter;
+    private JsonMaps jsonMaps;
     private HashMap<String, String> searchParams;
     private OnMyListener mOnMyListener;
 
@@ -63,6 +64,7 @@ public class DetailFragment extends Fragment implements AsyncResponseMaps {
 
         listview = (ListView)view.findViewById(R.id.listview_showInformation);
         listview.setAdapter(adapter);
+
 
         getData();
 
@@ -117,6 +119,7 @@ public class DetailFragment extends Fragment implements AsyncResponseMaps {
             }
             for(int i = 0 ; i < jsonMaps.getResults().size() ; i ++){
                     adapter.addItem(jsonMaps.getResults().get(i).getIcon(), jsonMaps.getResults().get(i).getName(), jsonMaps.getResults().get(i).getVicinity());
+                    adapter.setJsonResult(jsonMaps.getResults().get(i));
             }
             adapter.notifyDataSetChanged();
         }

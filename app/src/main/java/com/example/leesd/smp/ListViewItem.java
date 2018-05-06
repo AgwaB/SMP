@@ -3,11 +3,13 @@ package com.example.leesd.smp;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 
+import java.io.Serializable;
+
 /**
  * Created by leesd on 2018-03-23.
  */
 
-public class ListViewItem {
+public class ListViewItem implements Serializable {
     private String iconDrawbleUrl;
     private String title;
     private String address;
