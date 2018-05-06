@@ -15,6 +15,7 @@ import com.example.leesd.smp.RetrofitCall.AsyncResponseMaps;
 import com.example.leesd.smp.RetrofitCall.GoogleMapsNetworkCall;
 import com.example.leesd.smp.RetrofitCall.GooglePlaceService;
 import com.example.leesd.smp.googlemaps.JsonMaps;
+
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -23,6 +24,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -35,7 +37,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private Button fragmentChange;
     private boolean isFragmentChange = true ;
     private HashMap<String, String> searchParams;
-
+    
+    private ArrayList<LatLng> positionList; // list of user positions
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -55,6 +58,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.googleMap);
         mapFragment.getMapAsync(this);
+        
+        
 
         // add params to HashMap
         searchParams = new HashMap<String, String>();
@@ -79,6 +84,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         // execute background service
         n.execute(call);
+        
+        
+        
+        
 
         // fragment load
         Fragment fr = new RecoFragment();
@@ -86,6 +95,22 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
         fragmentTransaction.add(R.id.view, fr);
         fragmentTransaction.commit();
+    
+    
+        /*
+         *  TEMPERATURE PARAMETERS
+         *  if user choose that three points
+         */
+        positionList = new ArrayList<>();
+        positionList.add(new LatLng(37.475486, 126.933380));    // 관악
+        positionList.add(new LatLng(37.593227, 127.074668));    // 중랑
+        positionList.add(new LatLng(37.575260, 126.893325));    // 상암
+        
+        // pass the position to recommendation fragment list data
+        Bundle bundle = new Bundle();
+        bundle.putParcelableArrayList("positions", positionList);
+        fr.setArguments(bundle);
+        
     }
 
     @Override
@@ -112,6 +137,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         } else {
             fr = new RecoFragment() ;
         }
+        
         isFragmentChange = (isFragmentChange) ? false : true ;
 
         FragmentManager fm = getFragmentManager();
