@@ -8,6 +8,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1">
+
+        <fragment
+            android:id="@+id/place_autocomplete_fragment"
+            android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
+            android:layout_width="338dp"
+            android:layout_height="39dp"
+            android:layout_gravity="top"
+            android:layout_weight="7" />
         <Button
             android:id="@+id/fragmentChange"
             android:layout_gravity="right"
@@ -22,6 +30,7 @@
         android:layout_height="match_parent"
         tools:context="com.example.leesd.smp.MapsActivity"
         ></fragment>
+
     </FrameLayout>
 
     <FrameLayout
