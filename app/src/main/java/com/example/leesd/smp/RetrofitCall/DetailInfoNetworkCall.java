@@ -3,29 +3,30 @@ package com.example.leesd.smp.RetrofitCall;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.example.leesd.smp.DetailSearch.JsonDetail;
 import com.example.leesd.smp.googlemaps.JsonMaps;
 
 import retrofit2.Call;
 import retrofit2.Response;
 
 /**
- * Created by leo on 2017-07-17.
+ * Created by leesd on 2018-05-06.
  */
 
-public class GoogleMapsNetworkCall extends AsyncTask<Call, Void, Response<JsonMaps>> {
+public class DetailInfoNetworkCall extends AsyncTask<Call, Void, Response<JsonDetail>> {
     public AsyncResponseMaps delegate = null;
+
     @Override
-    protected Response<JsonMaps> doInBackground(Call... params){
+    protected Response<JsonDetail> doInBackground(Call... params) {
         // execute thread for background http call
         try {
 
-            Call<JsonMaps> call = params[0]; // get call params
-            Response<JsonMaps> response = call.execute(); // execute call
+            Call<JsonDetail> call = params[0]; // get call params
+            Response<JsonDetail> response = call.execute(); // execute call
 
-            Log.d("asfdsafasd", Integer.toString(response.body().getResults().size()));
             return response;
 
-        } catch (Exception e){
+        } catch (Exception e) {
 
             Log.e("AsyncTask", e.getMessage());
         }
@@ -35,12 +36,11 @@ public class GoogleMapsNetworkCall extends AsyncTask<Call, Void, Response<JsonMa
 
 
     @Override
-    protected void onPostExecute(Response<JsonMaps> response){
+    protected void onPostExecute(Response<JsonDetail> response) {
         // call if doInBackground returns response or null
 
         // send a response object to activity
-        delegate.processFinish(response);
-
-        Log.d("end", "ddddddd");
+        if(response!=null)
+            delegate.processDetailFinish(response);
     }
 }

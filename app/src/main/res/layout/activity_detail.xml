@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/backButton"
+
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="#00000000"
+            android:src="@drawable/arrow_left_48"/>
+        
+        <TextView
+            android:id="@+id/IDtitle"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:text="Item Title"
+            android:textSize="20sp"
+            android:gravity="center"/>
+
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"/>
+
+
+    </LinearLayout>
+
+    <com.daimajia.slider.library.SliderLayout
+        android:id="@+id/slider"
+        android:layout_width="match_parent"
+        android:layout_height="250dp" />
+
+    <TextView
+        android:id="@+id/IDnoimages"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:text="NO IMAGES"
+        android:gravity="center"
+        android:textSize="50sp"
+        android:visibility="gone"/>
+
+
+
+        <RatingBar
+            android:id="@+id/ratingBar"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:isIndicator="true"
+            android:numStars="5"
+            android:rating="0"
+            android:max="5"
+            android:stepSize="0.1"
+            android:textSize="20sp"/>
+
+    <!--<LinearLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="40dp"-->
+        <!--android:orientation="horizontal"-->
+        <!--android:paddingLeft="30dp"-->
+        <!--android:paddingRight="30dp">-->
+        <!--<TextView-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="40dp"-->
+            <!--android:textSize="15sp"-->
+            <!--android:text="주소 : "-->
+            <!--android:gravity="center_vertical"-->
+            <!--android:layout_weight="2" />-->
+        <!--<TextView-->
+            <!--android:id="@+id/IDadress"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="40dp"-->
+            <!--android:textSize="15sp"-->
+            <!--android:gravity="center_vertical"-->
+            <!--android:layout_weight="1"/>-->
+    <!--</LinearLayout>-->
+
+    <ListView
+        android:id="@+id/detailListView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"></ListView>
+
+    <TextView
+        android:id="@+id/IDnoreviews"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:text="NO REVIEWS"
+        android:gravity="center"
+        android:textSize="50sp"
+        android:visibility="gone"/>
+
+
+
+</LinearLayout>

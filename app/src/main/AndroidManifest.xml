@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.leesd.smp">
 
+    <uses-permission android:name="android.permission.INTERNET"></uses-permission>
+
 
 
     <application
@@ -24,6 +26,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".MainActivity"></activity>
+        <activity android:name=".DetailInfoActivity"></activity>
     </application>
 
 </manifest>

@@ -28,6 +28,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="40dp"
+            android:fontFamily="@font/intake"
             android:text="핫플레이스"
             android:textSize="30dp"
             android:gravity="center" />
