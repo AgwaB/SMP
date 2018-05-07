@@ -31,15 +31,16 @@ import java.util.Map;
 import retrofit2.Call;
 import retrofit2.Response;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, AsyncResponseMaps {
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, AsyncResponseMaps, RecoFragment.OnMyListener {
 	
 	private GoogleMap map;
 	private Button fragmentChange;
 	private boolean isFragmentChange = true;
+	
 	private HashMap<String, String> searchParams;
 	
 	private ArrayList<LatLng> positionList; // list of user positions
-	
+	private LatLng medianLatLng;            // median latlng (received from RecoFragment)
 	Fragment fr;
 	
 	@Override
@@ -104,7 +105,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 		
 		//google map load
 		SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-						.findFragmentById(R.id.googleMap);
+				.findFragmentById(R.id.googleMap);
 		mapFragment.getMapAsync(this);
 	}
 	
@@ -112,9 +113,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 	public void onMapReady(GoogleMap googleMap) {
 		map = googleMap;
 		
+		setUpMap();
+	}
+	
+	private void setUpMap() {
+		
 		LatLng SEOUL = new LatLng(37.56, 126.97);
 		
-		for(LatLng position : positionList){
+		for (LatLng position : positionList) {
 			MarkerOptions markerOptions = new MarkerOptions();
 			markerOptions.position(position);
 			map.addMarker(markerOptions);
@@ -122,7 +128,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 		
 		map.moveCamera(CameraUpdateFactory.newLatLng(SEOUL));
 		map.animateCamera(CameraUpdateFactory.zoomTo(10));
-		
 	}
 	
 	public void switchFragment() { // 버튼 클릭 시 프래그먼트 교체
@@ -151,4 +156,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 		Toast toast = Toast.makeText(context, text, duration);
 		toast.show();
 	}
+	
+	
+	// receive median latlng from RecoFragment
+	public void onReceivedData(Object data) {
+		//DETERMINE WHO STARTED THIS ACTIVITY
+		medianLatLng = (LatLng) data;
+//			Toast.makeText(this, "Received", Toast.LENGTH_SHORT).show();
+		
+		MarkerOptions markerOptions = new MarkerOptions();
+		markerOptions.position(medianLatLng);
+		map.addMarker(markerOptions);
+	}
+	
 }

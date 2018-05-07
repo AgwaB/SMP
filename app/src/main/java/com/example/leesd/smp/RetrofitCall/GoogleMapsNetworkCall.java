@@ -36,7 +36,7 @@ public class GoogleMapsNetworkCall extends AsyncTask<Call, Void, Response<JsonMa
     @Override
     protected void onPostExecute(Response<JsonMaps> response){
         // call if doInBackground returns response or null
-
+        
         // send a response object to activity
         delegate.processFinish(response);
     }
