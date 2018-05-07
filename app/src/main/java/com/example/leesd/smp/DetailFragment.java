@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,8 +13,6 @@ import android.widget.ListView;
 
 import com.example.leesd.smp.DetailSearch.JsonDetail;
 import com.example.leesd.smp.RetrofitCall.AsyncResponseMaps;
-import com.example.leesd.smp.RetrofitCall.DetailInfoNetworkCall;
-import com.example.leesd.smp.RetrofitCall.DetailInfoService;
 import com.example.leesd.smp.RetrofitCall.GoogleMapsNetworkCall;
 import com.example.leesd.smp.RetrofitCall.GooglePlaceService;
 import com.example.leesd.smp.googlemaps.JsonMaps;
@@ -29,6 +28,8 @@ import retrofit2.Response;
  */
 
 public class DetailFragment extends Fragment implements AsyncResponseMaps {
+    private int request_count = 0;
+    private String nextpagetoken = null;
     private ListView listview ;
     private ListViewAdapter adapter;
     private JsonMaps jsonMaps;
@@ -60,9 +61,6 @@ public class DetailFragment extends Fragment implements AsyncResponseMaps {
         listview = (ListView)view.findViewById(R.id.listview_showInformation);
         listview.setAdapter(adapter);
 
-
-        getData("0","0", null);
-
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -70,6 +68,8 @@ public class DetailFragment extends Fragment implements AsyncResponseMaps {
                 mOnMyListener.onReceiveData(listViewItem.getTitle());
             }
         });
+
+        getData("0","0", null);
 
         return view;
     }
@@ -83,6 +83,7 @@ public class DetailFragment extends Fragment implements AsyncResponseMaps {
         searchParams.put("radius", "500");
         searchParams.put("type", "cafe");
         searchParams.put("language", "ko");
+        searchParams.put("request_count", Integer.toString(request_count));
         searchParams.put("key", getString(R.string.placesKey));
 
         if(nextToken!=null)
@@ -92,7 +93,7 @@ public class DetailFragment extends Fragment implements AsyncResponseMaps {
         GooglePlaceService googlePlaceService = GooglePlaceService.retrofit.create(GooglePlaceService.class);
 
         // call GET request with category and HashMap params
-        final Call<JsonMaps> call = googlePlaceService.getPlaces("nearbysearch", searchParams);
+        Call<JsonMaps> call = googlePlaceService.getPlaces("nearbysearch", searchParams);
 
         // make a thread for http communication
         GoogleMapsNetworkCall n = new GoogleMapsNetworkCall();
@@ -110,9 +111,15 @@ public class DetailFragment extends Fragment implements AsyncResponseMaps {
         if(response!=null) {
             jsonMaps = response.body();
             jsonMapsPack.add(jsonMaps);
-
-            if(jsonMaps.getNextPageToken()!=null)
-                getData("0","0",jsonMaps.getNextPageToken());
+            if(jsonMaps.getNextPageToken()!=null){
+                getData("0","0", jsonMaps.getNextPageToken());
+                nextpagetoken = jsonMaps.getNextPageToken();
+                request_count++;
+            }
+            else if(nextpagetoken!=null && jsonMaps.getStatus().equals("INVALID_REQUEST")) {
+                getData("0", "0", nextpagetoken);
+                request_count++;
+            }
             else {
                 for(int x = 0 ; x < jsonMapsPack.size() ; x++)
                     for(int i = 0 ; i < jsonMapsPack.get(x).getResults().size() ; i ++){

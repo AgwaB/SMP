@@ -40,6 +40,7 @@ public class DetailInfoNetworkCall extends AsyncTask<Call, Void, Response<JsonDe
         // call if doInBackground returns response or null
 
         // send a response object to activity
-        delegate.processDetailFinish(response);
+        if(response!=null)
+            delegate.processDetailFinish(response);
     }
 }

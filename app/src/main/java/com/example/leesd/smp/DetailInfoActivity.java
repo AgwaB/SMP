@@ -43,7 +43,7 @@ public class DetailInfoActivity extends AppCompatActivity implements AsyncRespon
 
     private ListView listView;
     private DetailListViewAdapter adapter;
-    private TextView txt_title, txt_address;
+    private TextView txt_title, txt_address, txt_noimages, txt_noreviews;
     private ImageButton btn_back;
     private RatingBar ratingBar;
     private Result jsonResult;
@@ -67,6 +67,8 @@ public class DetailInfoActivity extends AppCompatActivity implements AsyncRespon
         txt_title = (TextView)findViewById(R.id.IDtitle);
         btn_back = (ImageButton)findViewById(R.id.backButton);
         //txt_address = (TextView)findViewById(R.id.IDadress);
+        txt_noimages = (TextView)findViewById(R.id.IDnoimages);
+        txt_noreviews = (TextView)findViewById(R.id.IDnoreviews);
         ratingBar = (RatingBar)findViewById(R.id.ratingBar);
 
         adapter = new DetailListViewAdapter();
@@ -135,17 +137,26 @@ public class DetailInfoActivity extends AppCompatActivity implements AsyncRespon
             ArrayList<Review> review = null;
             ArrayList<Photo> photo = null;
 
-        if(jsonDetail.getResult().getReviews()!=null) {
+        if(jsonDetail.getResult().getReviews()!=null) { // review data가 있으면 보여준다.
             review = (ArrayList<Review>) jsonDetail.getResult().getReviews();
 
             for (int i = 0; i < review.size(); i++)
                 adapter.addItem(review.get(i).getProfilePhotoUrl(), review.get(i).getRelativeTimeDescription(), review.get(i).getAuthorName(), review.get(i).getText(), review.get(i).getRating());
             adapter.notifyDataSetChanged();
         }
-        if(jsonDetail.getResult().getPhotos()!=null) {
+        else{ // 없으면 리뷰 없다고 하는 textview 보여줌
+            txt_noreviews.setVisibility(View.VISIBLE);
+            listView.setVisibility(View.GONE);
+        }
+
+        if(jsonDetail.getResult().getPhotos()!=null) { // photo data가 있으면 보여준다.
                 photo = (ArrayList<Photo>) jsonDetail.getResult().getPhotos();
             for (int i = 0; i < photo.size(); i++)
                 setPhotos(photo.get(i).getPhotoReference(), "300", "300");
+        }
+        else{ // 없으면 사진 없다고 하는 textview 보여줌
+            txt_noimages.setVisibility(View.VISIBLE);
+            sliderLayout.setVisibility(View.GONE);
         }
     }
 

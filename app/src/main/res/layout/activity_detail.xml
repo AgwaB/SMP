@@ -38,6 +38,15 @@
         android:layout_width="match_parent"
         android:layout_height="250dp" />
 
+    <TextView
+        android:id="@+id/IDnoimages"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:text="NO IMAGES"
+        android:gravity="center"
+        android:textSize="50sp"
+        android:visibility="gone"/>
+
 
 
         <RatingBar
@@ -78,5 +87,16 @@
         android:id="@+id/detailListView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"></ListView>
+
+    <TextView
+        android:id="@+id/IDnoreviews"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:text="NO REVIEWS"
+        android:gravity="center"
+        android:textSize="50sp"
+        android:visibility="gone"/>
+
+
 
 </LinearLayout>

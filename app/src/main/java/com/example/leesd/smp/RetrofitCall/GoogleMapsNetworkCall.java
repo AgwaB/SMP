@@ -22,6 +22,7 @@ public class GoogleMapsNetworkCall extends AsyncTask<Call, Void, Response<JsonMa
             Call<JsonMaps> call = params[0]; // get call params
             Response<JsonMaps> response = call.execute(); // execute call
 
+            Log.d("asfdsafasd", Integer.toString(response.body().getResults().size()));
             return response;
 
         } catch (Exception e){
@@ -39,5 +40,7 @@ public class GoogleMapsNetworkCall extends AsyncTask<Call, Void, Response<JsonMa
 
         // send a response object to activity
         delegate.processFinish(response);
+
+        Log.d("end", "ddddddd");
     }
 }

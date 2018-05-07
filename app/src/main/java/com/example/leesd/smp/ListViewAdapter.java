@@ -2,12 +2,14 @@ package com.example.leesd.smp;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -59,7 +61,9 @@ public class ListViewAdapter extends BaseAdapter{
         ImageView iconImageView = (ImageView) convertView.findViewById(R.id.item_icon) ;
         TextView titleTextView = (TextView) convertView.findViewById(R.id.item_title) ;
         TextView addressTextView = (TextView) convertView.findViewById(R.id.item_address) ;
-        Button detailButton = (Button) convertView.findViewById(R.id.IDdetailInfo);
+        ImageButton detailButton = (ImageButton) convertView.findViewById(R.id.IDdetailInfo);
+
+        detailButton.setFocusable(false); // 이거 해야 listview 자체도 클릭 가능함.
 
         // Data Set(listViewItemList)에서 position에 위치한 데이터 참조 획득
         final ListViewItem listViewItem = listViewItemList.get(position);
