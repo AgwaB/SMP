@@ -1,7 +1,9 @@
 package com.example.leesd.smp.RetrofitCall;
 
 
+import com.example.leesd.smp.DetailSearch.JsonDetail;
 import com.example.leesd.smp.googlemaps.JsonMaps;
+
 import retrofit2.Response;
 
 /**
@@ -11,4 +13,5 @@ import retrofit2.Response;
 // interface for getting response in activity
 public interface AsyncResponseMaps {
     void processFinish(Response<JsonMaps> response); // call if Retrofit is finished
+    void processDetailFinish(Response<JsonDetail> response);
 }

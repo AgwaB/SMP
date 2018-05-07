@@ -27,14 +27,14 @@ public class ListViewAdapter extends BaseAdapter{
     private ArrayList<ListViewItem> listViewItemList = new ArrayList<ListViewItem>() ;
 
     // DetailFragment에서 retrofit 통신 후 data를 받아오면 adapter에도 그 값을 넘겨 준다. (listview 내부의 button 클릭 시 data를 넘겨주기 위해)
-    private Result jsonResult;
+    private ArrayList<Result> jsonResult = new ArrayList<Result>();
 
     // ListViewAdapter의 생성자
     public ListViewAdapter() {
 
     }
-    public void setJsonResult(Result jsonResult){ // list 각각의 데이터를 가져 오려고 만듬(JsonMap는 Result의 set)
-        this.jsonResult = jsonResult;
+    public void addJsonResult(Result jsonResult){ // list 각각의 데이터를 가져 오려고 만듬(JsonMap는 Result의 set)
+        this.jsonResult.add(jsonResult);
     }
 
     // Adapter에 사용되는 데이터의 개수를 리턴. : 필수 구현
@@ -74,7 +74,7 @@ public class ListViewAdapter extends BaseAdapter{
                 Intent intent = new Intent(context, DetailInfoActivity.class);
                 intent.putExtra("position", position);
                 intent.putExtra("positionItem", listViewItem);
-                intent.putExtra("jsonResult", jsonResult);
+                intent.putExtra("jsonResult", jsonResult.get(position));
                 context.startActivity(intent);
             }
         });
