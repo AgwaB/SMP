@@ -4,6 +4,7 @@ import com.example.leesd.smp.googlemaps.JsonMaps;
 
 import java.util.Map;
 
+import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -29,8 +30,11 @@ public interface GooglePlaceService {
     );
 
     // base url for request
-    public static final Retrofit retrofit = new Retrofit.Builder()
+    OkHttpClient okHttpClient = new OkHttpClient();
+    
+    Retrofit retrofit = new Retrofit.Builder()
             .baseUrl("https://maps.googleapis.com/")
+            .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build();
 

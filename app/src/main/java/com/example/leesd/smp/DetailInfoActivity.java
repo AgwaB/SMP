@@ -101,7 +101,7 @@ public class DetailInfoActivity extends AppCompatActivity implements AsyncRespon
         searchParams.put("placeid", placeid);
         //searchParams.put("reference", reference);
         searchParams.put("language", "ko");
-        searchParams.put("key", getString(R.string.placesKey));
+        searchParams.put("key", getString(R.string.api));
 
 
         // build retrofit object
@@ -122,7 +122,7 @@ public class DetailInfoActivity extends AppCompatActivity implements AsyncRespon
 
     public void setPhotos(String photoreference, String maxheight, String maxwidth){
         defaultSliderView = new DefaultSliderView(this);
-        defaultSliderView.image(photoBaseUrl + "key=" + getString(R.string.placesKey) + "&photoreference=" + photoreference + "&maxheight=" + maxheight + "&maxwidth=" + maxwidth );
+        defaultSliderView.image(photoBaseUrl + "key=" + getString(R.string.api) + "&photoreference=" + photoreference + "&maxheight=" + maxheight + "&maxwidth=" + maxwidth );
         sliderLayout.addSlider(defaultSliderView);
     }
     @Override

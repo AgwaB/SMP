@@ -16,6 +16,7 @@ import com.example.leesd.smp.RetrofitCall.AsyncResponseMaps;
 import com.example.leesd.smp.RetrofitCall.GoogleMapsNetworkCall;
 import com.example.leesd.smp.RetrofitCall.GooglePlaceService;
 import com.example.leesd.smp.googlemaps.JsonMaps;
+import com.example.leesd.smp.googlemaps.Result;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -33,6 +34,7 @@ public class DetailFragment extends Fragment implements AsyncResponseMaps {
     private ListView listview ;
     private ListViewAdapter adapter;
     private JsonMaps jsonMaps;
+    private Result result;
     private ArrayList<JsonMaps> jsonMapsPack = new ArrayList<JsonMaps>();
     private HashMap<String, String> searchParams;
     private OnMyListener mOnMyListener;
@@ -69,22 +71,24 @@ public class DetailFragment extends Fragment implements AsyncResponseMaps {
             }
         });
 
-        getData("0","0", null);
+        result = (Result)getArguments().getSerializable("station"); // get data from RecoFragment
+
+        getData(result.getGeometry().getLocation().getLat(), result.getGeometry().getLocation().getLng(), null);
 
         return view;
     }
 
 
-    public void getData(String latitue, String longitude, String nextToken) { // RecoFragment에서 위도값 받아온 뒤 hashmap에 key-value로 넣어준다.
+    public void getData(Double latitue, Double longitude, String nextToken) { // RecoFragment에서 위도값 받아온 뒤 hashmap에 key-value로 넣어준다.
         // add params to HashMap
         searchParams = new HashMap<String, String>();
 
-        searchParams.put("location", Double.toString(37.56) + "," + Double.toString(126.97));
+        searchParams.put("location",latitue + "," + longitude);
         searchParams.put("radius", "500");
         searchParams.put("type", "cafe");
         searchParams.put("language", "ko");
         searchParams.put("request_count", Integer.toString(request_count));
-        searchParams.put("key", getString(R.string.placesKey));
+        searchParams.put("key", getString(R.string.api));
 
         if(nextToken!=null)
             searchParams.put("pagetoken", nextToken);
@@ -112,12 +116,12 @@ public class DetailFragment extends Fragment implements AsyncResponseMaps {
             jsonMaps = response.body();
             jsonMapsPack.add(jsonMaps);
             if(jsonMaps.getNextPageToken()!=null){
-                getData("0","0", jsonMaps.getNextPageToken());
+                getData(result.getGeometry().getLocation().getLat(), result.getGeometry().getLocation().getLng(), jsonMaps.getNextPageToken());
                 nextpagetoken = jsonMaps.getNextPageToken();
                 request_count++;
             }
             else if(nextpagetoken!=null && jsonMaps.getStatus().equals("INVALID_REQUEST")) {
-                getData("0", "0", nextpagetoken);
+                getData(result.getGeometry().getLocation().getLat(), result.getGeometry().getLocation().getLng(), nextpagetoken);
                 request_count++;
             }
             else {

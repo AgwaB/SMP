@@ -22,6 +22,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.leesd.smp.DetailSearch.JsonDetail;
 import com.example.leesd.smp.RetrofitCall.AsyncResponseMaps;
 import com.example.leesd.smp.RetrofitCall.GoogleMapsNetworkCall;
 import com.example.leesd.smp.RetrofitCall.GooglePlaceService;
@@ -35,6 +36,7 @@ import java.util.HashMap;
 import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.http.Url;
+
 
 /**
  * Created by leesd on 2018-03-15.
@@ -198,7 +200,13 @@ public class RecoFragment extends Fragment implements AsyncResponseMaps {
 				bundle.putSerializable("station", selectedItem);
 				
 				Fragment fr = new DetailFragment();
-				fr.setArguments(bundle);
+				fr.setArguments(bundle); // transmit to DetailFragment
+
+				//change fragment
+				FragmentManager fm = getFragmentManager();
+				FragmentTransaction fragmentTransaction = fm.beginTransaction();
+				fragmentTransaction.replace(R.id.view, fr);
+				fragmentTransaction.commit();
 			}
 		});
 		
@@ -272,7 +280,6 @@ public class RecoFragment extends Fragment implements AsyncResponseMaps {
 		});
 		
 	}
-	
 	// calculate median position of list
 	private LatLng getMidPoint(Iterable<LatLng> list) {
 		double sumLat = 0.0D;
@@ -480,7 +487,12 @@ public class RecoFragment extends Fragment implements AsyncResponseMaps {
 		Log.d("RETROFIT_RESULTS", response.body().getResults().toString());
 		Log.d("RETROFIT_METADATA", response.toString());
 	}
-	
+
+	@Override
+	public void processDetailFinish(Response<JsonDetail> response) {
+
+	}
+
 	private void googlePlaceSearch(HashMap<String, String> params) {
 		GooglePlaceService googlePlaceService = GooglePlaceService.retrofit.create(GooglePlaceService.class);
 		final Call<JsonMaps> call = googlePlaceService.getPlaces("nearbysearch", params);

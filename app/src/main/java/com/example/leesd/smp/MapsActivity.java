@@ -13,6 +13,8 @@ import android.widget.Toast;
 
 import com.example.leesd.smp.DetailSearch.JsonDetail;
 import com.example.leesd.smp.RetrofitCall.AsyncResponseMaps;
+import com.example.leesd.smp.RetrofitCall.GoogleMapsNetworkCall;
+import com.example.leesd.smp.RetrofitCall.GooglePlaceService;
 import com.example.leesd.smp.googlemaps.JsonMaps;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -25,6 +27,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import retrofit2.Call;
 import retrofit2.Response;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, AsyncResponseMaps, DetailFragment.OnMyListener {
@@ -60,13 +63,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 		searchParams.put("key", getString(R.string.api));
 		// build retrofit object
 		GooglePlaceService googlePlaceService = GooglePlaceService.retrofit.create(GooglePlaceService.class);
-		
+
+
+		// set delegate for receiving response object
+		GoogleMapsNetworkCall n = new GoogleMapsNetworkCall();
 		// execute background service
 		
 		n.delegate = MapsActivity.this;
-		
-		// set delegate for receiving response object
-		GoogleMapsNetworkCall n = new GoogleMapsNetworkCall();
+
 		
 		// make a thread for http communication
 		final Call<JsonMaps> call = googlePlaceService.getPlaces("nearbysearch", searchParams);
@@ -85,8 +89,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 		 *  if user choose that three points
 		 *  TEMPERATURE PARAMETERS
 		 */
-		positionList.add(new LatLng(37.475486, 126.933380));    // 관악
 		positionList = new ArrayList<>();
+		positionList.add(new LatLng(37.475486, 126.933380));    // 관악
 		positionList.add(new LatLng(37.593227, 127.074668));    // 중랑
 		positionList.add(new LatLng(37.575260, 126.893325));    // 상암
 		
@@ -96,9 +100,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 		
 		fr.setArguments(bundle);
 		//google map load
-		SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+		SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.googleMap);
 		mapFragment.getMapAsync(this);
-				.findFragmentById(R.id.googleMap);
+
 	}
 	
 	@Override
@@ -123,18 +127,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 	
 	
 	public void switchFragment() { // 버튼 클릭 시 프래그먼트 교체
-		if (isFragmentChange) {
 		Fragment fr;
+		if (isFragmentChange) {
 			fr = new DetailFragment();
 		} else {
 			fr = new RecoFragment();
 		}
 		isFragmentChange = (isFragmentChange) ? false : true;
 		
-		
+
 		FragmentManager fm = getFragmentManager();
-		fragmentTransaction.replace(R.id.view, fr);
 		FragmentTransaction fragmentTransaction = fm.beginTransaction();
+		fragmentTransaction.replace(R.id.view, fr);
 		fragmentTransaction.commit();
 		
 	}
@@ -146,16 +150,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 		Toast toast = Toast.makeText(context, text, duration);
 		toast.show();
 	}
-    public void onReceivedData(ArrayList<JsonMaps> data) { // DetailFragment에서 retrofit 통신 후 listview를 뿌려주고 나서, 해당 정보에 대한 marker를 찍어준다.
-    @Override
-        MarkerOptions markerOptions;
+
+	@Override
+	public void processDetailFinish(Response<JsonDetail> response) {
+
+	}
+	@Override
+	public void onReceivedData(ArrayList<JsonMaps> data) { // DetailFragment에서 retrofit 통신 후 listview를 뿌려주고 나서, 해당 정보에 대한 marker를 찍어준다.
+        MarkerOptions markerOptions = null;
         LatLng latLng ; // marker 위치
         jsonMapsPack = data;
         map.clear();
 
         for (int x = 0 ; x < jsonMapsPack.size() ; x++)
-                markerOptions = new MarkerOptions();
             for(int i = 0 ; i < jsonMapsPack.get(x).getResults().size() ; i++){ // marker정보 받아와서 nearbyMarker 에 넣어주기
+				markerOptions = new MarkerOptions();
                 latLng = new LatLng(jsonMapsPack.get(x).getResults().get(i).getGeometry().getLocation().getLat(), jsonMapsPack.get(x).getResults().get(i).getGeometry().getLocation().getLng());
                 markerOptions.position(latLng) // 위치 set
                         .title(jsonMapsPack.get(x).getResults().get(i).getName()); // 이름 set
