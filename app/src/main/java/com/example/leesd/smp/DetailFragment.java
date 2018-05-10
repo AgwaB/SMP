@@ -16,6 +16,8 @@ import com.example.leesd.smp.DetailSearch.JsonDetail;
 import com.example.leesd.smp.RetrofitCall.AsyncResponse;
 import com.example.leesd.smp.RetrofitCall.AsyncResponseDetail;
 import com.example.leesd.smp.RetrofitCall.AsyncResponseMaps;
+import com.example.leesd.smp.RetrofitCall.DetailInfoNetworkCall;
+import com.example.leesd.smp.RetrofitCall.DetailInfoService;
 import com.example.leesd.smp.RetrofitCall.GoogleMapsNetworkCall;
 import com.example.leesd.smp.RetrofitCall.GooglePlaceService;
 import com.example.leesd.smp.googlemaps.JsonMaps;
@@ -103,11 +105,11 @@ public class DetailFragment extends Fragment implements AsyncResponseMaps {
     }
 
 
-    public void getData(Double latitue, Double longitude, String nextToken) { // RecoFragment에서 위도값 받아온 뒤 hashmap에 key-value로 넣어준다.
+    public void getData(Double latitude, Double longitude, String nextToken) { // RecoFragment에서 위도값 받아온 뒤 hashmap에 key-value로 넣어준다.
         // add params to HashMap
         searchParams = new HashMap<String, String>();
 
-        searchParams.put("location",latitue + "," + longitude);
+        searchParams.put("location",latitude + "," + longitude);
         searchParams.put("radius", "500");
         searchParams.put("type", "cafe");
         searchParams.put("language", "ko");
@@ -118,13 +120,13 @@ public class DetailFragment extends Fragment implements AsyncResponseMaps {
             searchParams.put("pagetoken", nextToken);
 
         // build retrofit object
-        GooglePlaceService googlePlaceService = GooglePlaceService.retrofit.create(GooglePlaceService.class);
+        DetailInfoService googlePlaceService = DetailInfoService.retrofit.create(DetailInfoService.class);
 
         // call GET request with category and HashMap params
-        Call<JsonMaps> call = googlePlaceService.getPlaces("nearbysearch", searchParams);
+        Call<JsonDetail> call = googlePlaceService.getPlaces("nearbysearch", searchParams);
 
         // make a thread for http communication
-        GoogleMapsNetworkCall n = new GoogleMapsNetworkCall();
+        DetailInfoNetworkCall n = new DetailInfoNetworkCall();
 
         // set delegate for receiving response object
         n.delegate = DetailFragment.this;
@@ -134,7 +136,7 @@ public class DetailFragment extends Fragment implements AsyncResponseMaps {
     }
 
     @Override
-    public void processFinish(Response<JsonMaps> response) { // getData()의 retrofit 요청이 완료되면 이 함수 실행
+    public void processFinish(Response<JsonDetail> response) { // getData()의 retrofit 요청이 완료되면 이 함수 실행
         if(response!=null) {
             jsonMaps = response.body();
             jsonMapsPack.add(jsonMaps);
