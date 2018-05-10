@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.example.leesd.smp.DetailSearch.JsonDetail;
@@ -57,13 +58,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         setContentView(R.layout.activity_map);
 
         fragmentChange = (Button)findViewById(R.id.fragmentBack);
-
-        fragmentChange.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
 
 		recoFrameLayout = (FrameLayout)findViewById(R.id.recoView);
 		detailFrameLayout = (FrameLayout)findViewById(R.id.detailView);
@@ -142,21 +136,23 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 		jsonMapsPack = data;
 		map.clear();
 
-		for (int x = 0; x < jsonMapsPack.size(); x++) {
-			markerOptions = new MarkerOptions();
-			for (int i = 0; i < jsonMapsPack.get(x).getResults().size(); i++) { // marker정보 받아와서 nearbyMarker 에 넣어주기
-				latLng = new LatLng(jsonMapsPack.get(x).getResults().get(i).getGeometry().getLocation().getLat(), jsonMapsPack.get(x).getResults().get(i).getGeometry().getLocation().getLng());
-				markerOptions.position(latLng) // 위치 set
-						.title(jsonMapsPack.get(x).getResults().get(i).getName()); // 이름 set
-				map.addMarker(markerOptions); // 지도에 marker 추가
+		if(data != null) { // only mark when data exist
+			for (int x = 0; x < jsonMapsPack.size(); x++) {
+				markerOptions = new MarkerOptions();
+				for (int i = 0; i < jsonMapsPack.get(x).getResults().size(); i++) { // marker정보 받아와서 nearbyMarker 에 넣어주기
+					latLng = new LatLng(jsonMapsPack.get(x).getResults().get(i).getGeometry().getLocation().getLat(), jsonMapsPack.get(x).getResults().get(i).getGeometry().getLocation().getLng());
+					markerOptions.position(latLng) // 위치 set
+							.title(jsonMapsPack.get(x).getResults().get(i).getName()); // 이름 set
+					map.addMarker(markerOptions); // 지도에 marker 추가
 
-				nearbyMarker.add(markerOptions); // marker 저장
+					nearbyMarker.add(markerOptions); // marker 저장
+				}
 			}
 		}
 	}
 
 	@Override
-	public void onReceiveData(String name) { // DetailFragment에서 listview 클릭 시, 해당 item에 대한 marker를 focusing
+	public void onReceivedData(String name) { // DetailFragment에서 listview 클릭 시, 해당 item에 대한 marker를 focusing
         for(int i = 0 ; i < nearbyMarker.size() ; i ++){
             if(name == nearbyMarker.get(i).getTitle()){
                 map.addMarker(nearbyMarker.get(i)).showInfoWindow(); // marker 찾아서 focusing 해준다 (사실 다시 찍어줌 ㅋ)

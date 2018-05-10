@@ -50,7 +50,7 @@ public class DetailFragment extends Fragment implements AsyncResponseMaps {
 
     public interface OnMyListener{ // fragment -> activity 통신을 위한 callback용 interface
         void onReceivedData(ArrayList<JsonMaps> data); // retrofit 통신 끝난 후, activity의 google map에 market를 찍어주기 위한 callback용 interface
-        void onReceiveData(String name); // listview의 item 클릭 시, map에서 marker를 focusing하기 위한 callback용 interface
+        void onReceivedData(String name); // listview의 item 클릭 시, map에서 marker를 focusing하기 위한 callback용 interface
     }
 
     @Override
@@ -77,7 +77,7 @@ public class DetailFragment extends Fragment implements AsyncResponseMaps {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 ListViewItem listViewItem = (ListViewItem)parent.getItemAtPosition(position);
-                mOnMyListener.onReceiveData(listViewItem.getTitle());
+                mOnMyListener.onReceivedData(listViewItem.getTitle());
             }
         });
 
@@ -87,6 +87,12 @@ public class DetailFragment extends Fragment implements AsyncResponseMaps {
             @Override
             public void onClick(View v) {
                 fragmentBack.setVisibility(View.GONE);
+                adapter = new ListViewAdapter(); // reco에서 다시 detail로 넘겨올 때, 이 전 내용이 안보이도록 초기화
+                listview.setAdapter(adapter);
+
+                jsonMapsPack = null;
+                mOnMyListener.onReceivedData(jsonMapsPack);
+
                 switchFragment(null, "ToReco");
             }
         });
