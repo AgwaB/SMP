@@ -37,6 +37,8 @@ import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.http.Url;
 
+import static com.example.leesd.smp.MapsActivity.switchFragment;
+
 
 /**
  * Created by leesd on 2018-03-15.
@@ -136,7 +138,7 @@ public class RecoFragment extends Fragment implements AsyncResponseMaps {
 	}
 	
 	@Override
-	public void onViewCreated(View view, Bundle savedInstanceState) {
+	public void onViewCreated(View view, Bundle savedInstanceState) { // onCreateView 에서 return 한 view를 가지고 있다.
 		// Setup any handles to view objects here
 		CURRENT_SEARCH_STATE = 0;
 		
@@ -203,10 +205,7 @@ public class RecoFragment extends Fragment implements AsyncResponseMaps {
 				fr.setArguments(bundle); // transmit to DetailFragment
 
 				//change fragment, switchFragment is 'static method' (in MapsActivity)
-				FragmentManager fm = getFragmentManager();
-				FragmentTransaction fragmentTransaction = fm.beginTransaction();
-				fragmentTransaction.replace(R.id.view, fr);
-				fragmentTransaction.commit();
+				switchFragment(fr, "ToDetail");
 			}
 		});
 		

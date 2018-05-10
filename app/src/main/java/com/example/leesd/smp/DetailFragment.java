@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 
 import com.example.leesd.smp.DetailSearch.JsonDetail;
@@ -26,6 +27,9 @@ import java.util.HashMap;
 import retrofit2.Call;
 import retrofit2.Response;
 
+import static com.example.leesd.smp.MapsActivity.frChangefCheck;
+import static com.example.leesd.smp.MapsActivity.switchFragment;
+
 /**
  * Created by leesd on 2018-03-16.
  */
@@ -36,6 +40,8 @@ public class DetailFragment extends Fragment implements AsyncResponseMaps {
     private String nextpagetoken = null;
     private JsonMaps jsonMaps;
     private Result result;
+
+    private Button fragmentBack;
     private ListView listview ;
     private ListViewAdapter adapter;
     private ArrayList<JsonMaps> jsonMapsPack = new ArrayList<JsonMaps>();
@@ -63,6 +69,9 @@ public class DetailFragment extends Fragment implements AsyncResponseMaps {
 
         adapter = new ListViewAdapter();
 
+
+        fragmentBack = (Button)getActivity().findViewById(R.id.fragmentBack);
+
         listview = (ListView)view.findViewById(R.id.listview_showInformation);
         listview.setAdapter(adapter);
 
@@ -71,6 +80,18 @@ public class DetailFragment extends Fragment implements AsyncResponseMaps {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 ListViewItem listViewItem = (ListViewItem)parent.getItemAtPosition(position);
                 mOnMyListener.onReceiveData(listViewItem.getTitle());
+            }
+        });
+
+        fragmentBack.setVisibility(View.VISIBLE);
+
+        fragmentBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fragmentBack.setVisibility(View.GONE);
+                Fragment fr = new RecoFragment();
+                frChangefCheck = true;
+                switchFragment(fr, "ToReco");
             }
         });
 

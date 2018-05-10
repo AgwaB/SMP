@@ -42,7 +42,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private ArrayList<JsonMaps> jsonMapsPack; // DetailFragment에서 주변 정보들을 받아 온 뒤, callback method를 통해 이 변수로 넣어준다.
 	private ArrayList<LatLng> positionList; // list of user positions
 	private LatLng medianLatLng;            // median latlng (received from RecoFragment)
-	Fragment fr;
+
+
+	static Fragment fr;
+	static FragmentManager fm ; // 초기 RecoFragment인지, back을 통한 RecoFragment인지
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,15 +57,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         fragmentChange.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-				switchFragment();
+
             }
         });
 
 		// fragment load
-
 		fr = new RecoFragment();
 
-		FragmentManager fm = getFragmentManager();
+		fm = getFragmentManager();
 		FragmentTransaction fragmentTransaction = fm.beginTransaction();
 		fragmentTransaction.add(R.id.view, fr);
 		fragmentTransaction.commit();
@@ -106,19 +109,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 	}
 	
 	
-	public void switchFragment() { // 프래그먼트 교체는 여기서 다 다룬다.
-		Fragment fr;
-		if (isFragmentChange) {
-			fr = new DetailFragment() ;
-		} else {
-			fr = new RecoFragment() ;
-		}
-		isFragmentChange = (isFragmentChange) ? false : true ;
+	static public void switchFragment(Fragment _fr, String fromTo) { // 프래그먼트 교체는 여기서 다 다룬다.
+		if(fromTo.equals("ToReco")){ // 기존에 있던 fragment 정보를 사용한다 ( new를 통한 새로운 생성 X)
 
-		FragmentManager fm = getFragmentManager();
-		FragmentTransaction fragmentTransaction = fm.beginTransaction();
-		fragmentTransaction.replace(R.id.view, fr);
-		fragmentTransaction.commit();
+			FragmentTransaction fragmentTransaction = fm.beginTransaction();
+			fragmentTransaction.replace(R.id.view, fr);
+			fragmentTransaction.commit();
+		}
+		else if(fromTo.equals("ToDetail")){
+
+			FragmentTransaction fragmentTransaction = fm.beginTransaction();
+			fragmentTransaction.replace(R.id.view, _fr);
+			fragmentTransaction.commit();
+		}
 	}
 
 	@Override
