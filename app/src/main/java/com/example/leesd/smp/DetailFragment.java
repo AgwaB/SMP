@@ -12,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.example.leesd.smp.DetailSearch.JsonDetail;
+import com.example.leesd.smp.RetrofitCall.AsyncResponseDetail;
 import com.example.leesd.smp.RetrofitCall.AsyncResponseMaps;
 import com.example.leesd.smp.RetrofitCall.GoogleMapsNetworkCall;
 import com.example.leesd.smp.RetrofitCall.GooglePlaceService;
@@ -28,7 +29,7 @@ import retrofit2.Response;
  * Created by leesd on 2018-03-16.
  */
 
-public class DetailFragment extends Fragment implements AsyncResponseMaps {
+public class DetailFragment extends Fragment implements AsyncResponseDetail {
     private int request_count = 0;
     private String nextpagetoken = null;
     private ListView listview ;
@@ -141,7 +142,7 @@ public class DetailFragment extends Fragment implements AsyncResponseMaps {
     }
 
     @Override
-    public void processDetailFinish(Response<JsonDetail> response) {
+    public void processFinish(Response<JsonDetail> response) {
 
     }
 

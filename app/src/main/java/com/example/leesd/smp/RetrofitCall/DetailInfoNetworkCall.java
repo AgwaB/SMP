@@ -14,7 +14,7 @@ import retrofit2.Response;
  */
 
 public class DetailInfoNetworkCall extends AsyncTask<Call, Void, Response<JsonDetail>> {
-    public AsyncResponseMaps delegate = null;
+    public AsyncResponseDetail delegate = null;
 
     @Override
     protected Response<JsonDetail> doInBackground(Call... params) {
@@ -41,6 +41,6 @@ public class DetailInfoNetworkCall extends AsyncTask<Call, Void, Response<JsonDe
 
         // send a response object to activity
         if(response!=null)
-            delegate.processDetailFinish(response);
+            delegate.processFinish(response);
     }
 }

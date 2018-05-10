@@ -50,7 +50,6 @@ public class Result implements Serializable {
     @SerializedName("price_level")
     @Expose
     private Integer priceLevel;
-    
     @SerializedName("weight")
     @Expose
     private Integer weight;
@@ -288,8 +287,9 @@ public class Result implements Serializable {
     public void setPriceLevel(Integer priceLevel) {
         this.priceLevel = priceLevel;
     }
-    
-    
+
+
+
     /**
      *
      * @return
@@ -298,7 +298,7 @@ public class Result implements Serializable {
     public Integer getWeight() {
         return weight;
     }
-    
+
     /**
      *
      * @param weight

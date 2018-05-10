@@ -11,6 +11,6 @@ import retrofit2.Response;
  */
 
 // interface for getting response in activity
-public interface AsyncResponseMaps extends AsyncResponse<JsonMaps>{
-    void processFinish(Response<JsonMaps> response); // call if Retrofit is finished
+public interface AsyncResponseDetail extends AsyncResponse<JsonDetail> {
+    void processFinish(Response<JsonDetail> response);    // call if Retrofit is finished
 }
