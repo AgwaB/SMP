@@ -1,14 +1,9 @@
 package com.example.leesd.smp;
 
 import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.annotation.Nullable;
-import android.support.constraint.ConstraintLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,14 +11,11 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.FrameLayout;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.leesd.smp.DetailSearch.JsonDetail;
 import com.example.leesd.smp.RetrofitCall.AsyncResponseMaps;
 import com.example.leesd.smp.RetrofitCall.GoogleMapsNetworkCall;
 import com.example.leesd.smp.RetrofitCall.GooglePlaceService;
@@ -36,7 +28,6 @@ import java.util.HashMap;
 
 import retrofit2.Call;
 import retrofit2.Response;
-import retrofit2.http.Url;
 
 import static com.example.leesd.smp.MapsActivity.switchFragment;
 
@@ -120,7 +111,8 @@ public class RecoFragment extends Fragment implements AsyncResponseMaps {
 	public static final int MOVIE_THEATER = 32;
 	public static final int STATION = 40;
 
-	public static final Integer RADIUS = 500;
+	public static final Integer STATION_RADIUS = 1000;
+	public static final Integer NEARBYPLACES_RADIUS = 500;
 
 	private int CURRENT_SEARCH_STATE;       // search state
 
@@ -148,11 +140,10 @@ public class RecoFragment extends Fragment implements AsyncResponseMaps {
 		Button buttonHotplace = getView().findViewById(R.id.button_hotplace);
 
 		// setting up the ListView
-		stationsListViewAdapter = new StationsListViewAdapter();
-		stationsView = getView().findViewById(R.id.stations_list);
-		stationsView.setAdapter(stationsListViewAdapter);
-
-		stations = stationsListViewAdapter.stations;
+		stationsListViewAdapter = new StationsListViewAdapter();	// create listview adapter
+		stationsView = getView().findViewById(R.id.stations_list);	// get listview
+		stationsView.setAdapter(stationsListViewAdapter);			// set listview adapter
+		stations = stationsListViewAdapter.stations;				// set station list for listview
 
 		getView().findViewById(R.id.reco_layout_listview).setVisibility(View.INVISIBLE);
 
@@ -171,23 +162,9 @@ public class RecoFragment extends Fragment implements AsyncResponseMaps {
 		Toast toast = Toast.makeText(context, text, duration);
 		toast.show();
 
-
 		// search the subway station nearby median position
-		// add params to HashMap
-		HashMap<String, String> searchParams = new HashMap<>();
-		searchParams.put("location", medianLatlng.latitude + "," + medianLatlng.longitude);
-		searchParams.put("radius", "1000");
-		searchParams.put("type", "subway_station");
-		searchParams.put("language", "ko");
-		searchParams.put("key", getString(R.string.api));
-
-
-		// clear the previous results
-		if (jsonMapsResults != null)
-			jsonMapsResults.clear();
-
 		CURRENT_SEARCH_STATE = STATION;
-		googlePlaceSearch(searchParams);
+		getNearByPlacesWithType(null, medianLatlng.latitude +","+ medianLatlng.longitude, STATION);
 
 		// when item clicked, pass the subway to detail fragment
 		stationsView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -262,20 +239,11 @@ public class RecoFragment extends Fragment implements AsyncResponseMaps {
 							Result station = stations.get(index);
 							double lat = station.getGeometry().getLocation().getLat();
 							double lng = station.getGeometry().getLocation().getLng();
-							int station_id = index;
+							int stationId = index;
 
-							getNearByPlacesWithType(station_id, lat + ","+ lng, CAFE);
+							getNearByPlacesWithType(stationId, lat + ","+ lng, CAFE);
 
-//							HashMap<String, String> searchParams = new HashMap<>();
-//							searchParams.put("location", lat + "," + lng);
-//							searchParams.put("station_id", station_id + "");
-//							searchParams.put("radius", RADIUS.toString());
-//							searchParams.put("type", "cafe");
-//							searchParams.put("language", "ko");
-//							searchParams.put("key", getString(R.string.api));
-
-                            CURRENT_SEARCH_STATE = CAFE;
-//							googlePlaceSearch(searchParams);
+							CURRENT_SEARCH_STATE = CAFE;
 						}
 
 					}
@@ -292,20 +260,11 @@ public class RecoFragment extends Fragment implements AsyncResponseMaps {
 							Result station = stations.get(index);
 							double lat = station.getGeometry().getLocation().getLat();
 							double lng = station.getGeometry().getLocation().getLng();
-							int station_id = index;
+							int stationId = index;
 
-                            getNearByPlacesWithType(station_id, lat + ","+ lng, PARK);
-
-//							HashMap<String, String> searchParams = new HashMap<>();
-//							searchParams.put("location", lat + "," + lng);
-//							searchParams.put("station_id", station_id + "");
-//							searchParams.put("radius", RADIUS.toString());
-//							searchParams.put("type", "park");
-//							searchParams.put("language", "ko");
-//							searchParams.put("key", getString(R.string.api));
+							getNearByPlacesWithType(stationId, lat + ","+ lng, PARK);
 
 							CURRENT_SEARCH_STATE = PARK;
-//							googlePlaceSearch(searchParams);
 						}
 
 					}
@@ -322,20 +281,11 @@ public class RecoFragment extends Fragment implements AsyncResponseMaps {
 							Result station = stations.get(index);
 							double lat = station.getGeometry().getLocation().getLat();
 							double lng = station.getGeometry().getLocation().getLng();
-							int station_id = index;
+							int stationId = index;
 
-                            getNearByPlacesWithType(station_id, lat + ","+ lng, BAR);
-
-//							HashMap<String, String> searchParams = new HashMap<>();
-//							searchParams.put("location", lat + "," + lng);
-//							searchParams.put("station_id", station_id + "");
-//							searchParams.put("radius", RADIUS.toString());
-//							searchParams.put("type", "bar");
-//							searchParams.put("language", "ko");
-//							searchParams.put("key", getString(R.string.api));
+							getNearByPlacesWithType(stationId, lat + ","+ lng, BAR);
 
 							CURRENT_SEARCH_STATE = BAR;
-//							googlePlaceSearch(searchParams);
 						}
 
 					}
@@ -379,143 +329,81 @@ public class RecoFragment extends Fragment implements AsyncResponseMaps {
 			}
 		}
 
-		int station_id = -1;
-		int nextValue = -1;
 
+
+		// if search place that near by station
 		if (response.raw().request().url().queryParameter("station_id") != null) {
-			station_id = Integer.valueOf(response.raw().request().url().queryParameter("station_id"));
-			jsonMapsResults.get(station_id).add(response.body());
+			// station_id is exist on query
+			int stationId = Integer.valueOf(response.raw().request().url().queryParameter("station_id"));	// stations index
+			int nextValue = stations.get(stationId).getWeight() + response.body().getResults().size();	// each station's results length
 
-			int last = jsonMapsResults.get(station_id).size() - 1;
-			if (jsonMapsResults.get(station_id).get(last).getNextPageToken() != null) {
-				HashMap<String, String> searchParams = new HashMap<>();
+			jsonMapsResults.get(stationId).add(response.body());
 
-				if (station_id != -1) {
-					nextValue = stations.get(station_id).getWeight() + response.body().getResults().size();
-					stations.get(station_id).setWeight(nextValue);
-				}
-
-				searchParams.put("station_id", station_id + "");
-				searchParams.put("pagetoken", jsonMapsResults.get(station_id).get(last).getNextPageToken());
-				searchParams.put("location", queryLocation);
-				searchParams.put("key", getString(R.string.api));
-
-				googlePlaceSearch(searchParams);
+			int last = jsonMapsResults.get(stationId).size() - 1;
+			if (jsonMapsResults.get(stationId).get(last).getNextPageToken() != null) {
+				// set # of places on result element
+				stations.get(stationId).setWeight(nextValue);
+				getNextResultPage(stationId, jsonMapsResults.get(stationId).get(last).getNextPageToken());
 			} else {
-				for (JsonMaps j : jsonMapsResults.get(station_id)) {
+				for (JsonMaps j : jsonMapsResults.get(stationId)) {
 					if (j.getNextPageToken() != null) {
-						nextValue = stations.get(station_id).getWeight() + response.body().getResults().size();
-						stations.get(station_id).setWeight(nextValue);
+//						nextValue = stations.get(stationId).getWeight() + response.body().getResults().size();
+						stations.get(stationId).setWeight(nextValue);
 					}
 				}
 				switch (CURRENT_SEARCH_STATE) {
 					case CAFE:
-						nextValue = stations.get(station_id).getWeight() + response.body().getResults().size();
-						stations.get(station_id).setWeight(nextValue);
-
-						getNearByPlacesWithType(station_id, queryLocation, LIBRARY);
-//						HashMap<String, String> searchParams = new HashMap<>();
-//						searchParams.put("station_id", station_id + "");
-//						searchParams.put("location", queryLocation);
-//						searchParams.put("radius", RADIUS.toString());
-//						searchParams.put("type", "library");    // next search keyword
-//						searchParams.put("language", "ko");
-//						searchParams.put("key", getString(R.string.api));
-
+//						nextValue = stations.get(stationId).getWeight() + response.body().getResults().size();
+						stations.get(stationId).setWeight(nextValue);
+						getNearByPlacesWithType(stationId, queryLocation, LIBRARY);
 						CURRENT_SEARCH_STATE = LIBRARY;
-//						googlePlaceSearch(searchParams);
 						break;
 					case LIBRARY:
-						nextValue = stations.get(station_id).getWeight() + response.body().getResults().size();
-						stations.get(station_id).setWeight(nextValue);
-
+//						nextValue = stations.get(stationId).getWeight() + response.body().getResults().size();
+						stations.get(stationId).setWeight(nextValue);
 						CURRENT_SEARCH_STATE = NONE;
 						break;
 
 					case PARK:
-						nextValue = stations.get(station_id).getWeight() + response.body().getResults().size();
-						stations.get(station_id).setWeight(nextValue);
-                        getNearByPlacesWithType(station_id, queryLocation, BOWLING_ALLEY);
-//
-//						searchParams = new HashMap<>();
-//						searchParams.put("station_id", station_id + "");
-//						searchParams.put("location", queryLocation);
-//						searchParams.put("radius", RADIUS.toString());
-//						searchParams.put("type", "bowling_alley");    // next search keyword
-//						searchParams.put("language", "ko");
-//						searchParams.put("key", getString(R.string.api));
-
+//						nextValue = stations.get(stationId).getWeight() + response.body().getResults().size();
+						stations.get(stationId).setWeight(nextValue);
+						getNearByPlacesWithType(stationId, queryLocation, BOWLING_ALLEY);
 						CURRENT_SEARCH_STATE = BOWLING_ALLEY;
-//						googlePlaceSearch(searchParams);
 						break;
 					case BOWLING_ALLEY:
-						nextValue = stations.get(station_id).getWeight() + response.body().getResults().size();
-						stations.get(station_id).setWeight(nextValue);
-                        getNearByPlacesWithType(station_id, queryLocation, ART_GALLERY);
-
-						//
-//						searchParams = new HashMap<>();
-//						searchParams.put("station_id", station_id + "");
-//						searchParams.put("location", queryLocation);
-//						searchParams.put("radius", RADIUS.toString());
-//						searchParams.put("type", "art_gallary");    // next search keyword
-//						searchParams.put("language", "ko");
-//						searchParams.put("key", getString(R.string.api));
-
+//						nextValue = stations.get(stationId).getWeight() + response.body().getResults().size();
+						stations.get(stationId).setWeight(nextValue);
+						getNearByPlacesWithType(stationId, queryLocation, ART_GALLERY);
 						CURRENT_SEARCH_STATE = ART_GALLERY;
-//						googlePlaceSearch(searchParams);
 						break;
 
 					case ART_GALLERY:
-						nextValue = stations.get(station_id).getWeight() + response.body().getResults().size();
-						stations.get(station_id).setWeight(nextValue);
-
+//						nextValue = stations.get(stationId).getWeight() + response.body().getResults().size();
+						stations.get(stationId).setWeight(nextValue);
 						CURRENT_SEARCH_STATE = NONE;
 						break;
 
 					case BAR:
-						nextValue = stations.get(station_id).getWeight() + response.body().getResults().size();
-						stations.get(station_id).setWeight(nextValue);
-                        getNearByPlacesWithType(station_id, queryLocation, DEPARTMENT_STORE);
-
-//						searchParams = new HashMap<>();
-//						searchParams.put("station_id", station_id + "");
-//						searchParams.put("location", queryLocation);
-//						searchParams.put("radius", RADIUS.toString());
-//						searchParams.put("type", "department_store");    // next search keyword
-//						searchParams.put("language", "ko");
-//						searchParams.put("key", getString(R.string.api));
-
+//						nextValue = stations.get(stationId).getWeight() + response.body().getResults().size();
+						stations.get(stationId).setWeight(nextValue);
+						getNearByPlacesWithType(stationId, queryLocation, DEPARTMENT_STORE);
 						CURRENT_SEARCH_STATE = DEPARTMENT_STORE;
-//						googlePlaceSearch(searchParams);
 						break;
 
 					case DEPARTMENT_STORE:
-						nextValue = stations.get(station_id).getWeight() + response.body().getResults().size();
-						stations.get(station_id).setWeight(nextValue);
-
-                        getNearByPlacesWithType(station_id, queryLocation, MOVIE_THEATER);
-
-//						searchParams = new HashMap<>();
-//						searchParams.put("station_id", station_id + "");
-//						searchParams.put("location", queryLocation);
-//						searchParams.put("radius", RADIUS.toString());
-//						searchParams.put("type", "movie_theater");    // next search keyword
-//						searchParams.put("language", "ko");
-//						searchParams.put("key", getString(R.string.api));
-
+//						nextValue = stations.get(stationId).getWeight() + response.body().getResults().size();
+						stations.get(stationId).setWeight(nextValue);
+						getNearByPlacesWithType(stationId, queryLocation, MOVIE_THEATER);
 						CURRENT_SEARCH_STATE = MOVIE_THEATER;
-//						googlePlaceSearch(searchParams);
 						break;
 					case MOVIE_THEATER:
-						nextValue = stations.get(station_id).getWeight() + response.body().getResults().size();
-						stations.get(station_id).setWeight(nextValue);
-
+//						nextValue = stations.get(stationId).getWeight() + response.body().getResults().size();
+						stations.get(stationId).setWeight(nextValue);
 						CURRENT_SEARCH_STATE = NONE;
 						break;
 
 					case STATION:
-					    // nothing to do
+						// nothing to do
 						break;
 
 					default:
@@ -543,18 +431,35 @@ public class RecoFragment extends Fragment implements AsyncResponseMaps {
 		Log.d("RETROFIT_METADATA", response.toString());
 	}
 
-	private void getNearByPlacesWithType(int stationId, String location, int placeType) {
+	private void getNearByPlacesWithType(Integer stationId, String location, int placeType) {
 		HashMap<String, String> searchParams = new HashMap<>(); // Hash arguments for search
 		String queryType = getPlaceTypeName(placeType);
 
-		searchParams.put("station_id", stationId + ""); // station index in list
+		if(stationId != null){
+			searchParams.put("station_id", stationId + ""); // station index in list
+			searchParams.put("radius", NEARBYPLACES_RADIUS.toString());
+		}
+		else {
+			searchParams.put("radius", STATION_RADIUS.toString());  // limitation radius for search
+		}
+
 		searchParams.put("location", location);         // location string parameter (lat, lng)
-		searchParams.put("radius", RADIUS.toString());  // limitation radius for search
 		searchParams.put("type", queryType);            // type of places
 		searchParams.put("language", "ko");             // language
 		searchParams.put("key", getString(R.string.api));   // api key
 
-        googlePlaceSearch(searchParams);    // search network call
+		googlePlaceSearch(searchParams);    // search network call
+	}
+
+	private void getNextResultPage(Integer stationId, String pageToken){
+
+		HashMap<String, String> searchParams = new HashMap<>();
+		searchParams.put("station_id", stationId + "");
+		searchParams.put("pagetoken", pageToken);
+		searchParams.put("key", getString(R.string.api));
+
+		googlePlaceSearch(searchParams);
+
 	}
 
 	// convert place state (integer) to place type name (string)
@@ -577,7 +482,7 @@ public class RecoFragment extends Fragment implements AsyncResponseMaps {
 			case MOVIE_THEATER:
 				return "movie_theater";
 			case STATION:
-				return "station";
+				return "subway_station";
 			default:
 				throw new IllegalArgumentException("Place type number is illegal. ");
 		}
@@ -614,4 +519,5 @@ public class RecoFragment extends Fragment implements AsyncResponseMaps {
 		}
 		jsonMapsResults.clear();
 	}
+
 }
