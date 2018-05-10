@@ -32,7 +32,7 @@ import java.util.HashMap;
 import retrofit2.Call;
 import retrofit2.Response;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, AsyncResponseDetail, DetailFragment.OnMyListener {
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, DetailFragment.OnMyListener {
 
     private GoogleMap map;
     private Button fragmentChange;
@@ -48,18 +48,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
 
-        fragmentChange = (Button)findViewById(R.id.fragmentChange);
+        fragmentChange = (Button)findViewById(R.id.fragmentBack);
 
         fragmentChange.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                switchFragment();
+				switchFragment();
             }
         });
 
 		// fragment load
+
 		fr = new RecoFragment();
-		
+
 		FragmentManager fm = getFragmentManager();
 		FragmentTransaction fragmentTransaction = fm.beginTransaction();
 		fragmentTransaction.add(R.id.view, fr);
@@ -105,22 +106,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 	}
 	
 	
-	public void switchFragment() { // 버튼 클릭 시 프래그먼트 교체
+	public void switchFragment() { // 프래그먼트 교체는 여기서 다 다룬다.
 		Fragment fr;
 		if (isFragmentChange) {
-			Fragment fr;
-			fr = new DetailFragment();
+			fr = new DetailFragment() ;
 		} else {
-			fr = new RecoFragment();
+			fr = new RecoFragment() ;
 		}
-		isFragmentChange = (isFragmentChange) ? false : true;
-		
+		isFragmentChange = (isFragmentChange) ? false : true ;
 
 		FragmentManager fm = getFragmentManager();
 		FragmentTransaction fragmentTransaction = fm.beginTransaction();
 		fragmentTransaction.replace(R.id.view, fr);
 		fragmentTransaction.commit();
-		
 	}
 
 	@Override
@@ -143,14 +141,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 		}
 	}
 
-//    @Override
-//    public void onReceivedData(String name) { // DetailFragment에서 listview 클릭 시, 해당 item에 대한 marker를 focusing
-//        for(int i = 0 ; i < nearbyMarker.size() ; i ++){
-//            if(name == nearbyMarker.get(i).getTitle()){
-//                map.addMarker(nearbyMarker.get(i)).showInfoWindow(); // marker 찾아서 focusing 해준다 (사실 다시 찍어줌 ㅋ)
-//            }
-//        }
-//    }
+	@Override
+	public void onReceiveData(String name) { // DetailFragment에서 listview 클릭 시, 해당 item에 대한 marker를 focusing
+        for(int i = 0 ; i < nearbyMarker.size() ; i ++){
+            if(name == nearbyMarker.get(i).getTitle()){
+                map.addMarker(nearbyMarker.get(i)).showInfoWindow(); // marker 찾아서 focusing 해준다 (사실 다시 찍어줌 ㅋ)
+            }
+        }
+    }
 
 	// receive median latlng from RecoFragment
 	public void onReceivedData(Object data) {
@@ -162,5 +160,5 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 		markerOptions.position(medianLatLng);
 		map.addMarker(markerOptions);
 	}
-	
+
 }

@@ -11,10 +11,11 @@
 
 
         <Button
-            android:id="@+id/fragmentChange"
-            android:layout_gravity="right"
+            android:id="@+id/fragmentBack"
+            android:layout_gravity="left"
             android:layout_width="40dp"
-            android:layout_height="40dp" />
+            android:layout_height="40dp"
+            android:visibility="gone"/>
 
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:map="http://schemas.android.com/apk/res-auto"

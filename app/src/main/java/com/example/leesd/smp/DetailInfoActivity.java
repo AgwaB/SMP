@@ -17,6 +17,7 @@ import com.daimajia.slider.library.SliderTypes.DefaultSliderView;
 import com.example.leesd.smp.DetailSearch.JsonDetail;
 import com.example.leesd.smp.DetailSearch.Photo;
 import com.example.leesd.smp.DetailSearch.Review;
+import com.example.leesd.smp.RetrofitCall.AsyncResponseDetail;
 import com.example.leesd.smp.RetrofitCall.AsyncResponseMaps;
 import com.example.leesd.smp.RetrofitCall.DetailInfoNetworkCall;
 import com.example.leesd.smp.RetrofitCall.DetailInfoService;
@@ -36,7 +37,7 @@ import retrofit2.Response;
  * Created by leesd on 2018-03-23.
  */
 
-public class DetailInfoActivity extends AppCompatActivity implements AsyncResponseMaps {
+public class DetailInfoActivity extends AppCompatActivity implements AsyncResponseDetail {
     private final String photoBaseUrl = "https://maps.googleapis.com/maps/api/place/photo?";
     private SliderLayout sliderLayout; // image slider layout :  external library
     private DefaultSliderView defaultSliderView;
@@ -126,12 +127,7 @@ public class DetailInfoActivity extends AppCompatActivity implements AsyncRespon
         sliderLayout.addSlider(defaultSliderView);
     }
     @Override
-    public void processFinish(Response<JsonMaps> response) {
-
-    }
-
-    @Override
-    public void processDetailFinish(Response<JsonDetail> response) {
+    public void processFinish(Response<JsonDetail> response) {
         if(response!=null)
             jsonDetail = response.body();
             ArrayList<Review> review = null;

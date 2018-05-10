@@ -12,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.example.leesd.smp.DetailSearch.JsonDetail;
+import com.example.leesd.smp.RetrofitCall.AsyncResponse;
 import com.example.leesd.smp.RetrofitCall.AsyncResponseDetail;
 import com.example.leesd.smp.RetrofitCall.AsyncResponseMaps;
 import com.example.leesd.smp.RetrofitCall.GoogleMapsNetworkCall;
@@ -29,13 +30,14 @@ import retrofit2.Response;
  * Created by leesd on 2018-03-16.
  */
 
-public class DetailFragment extends Fragment implements AsyncResponseDetail {
+public class DetailFragment extends Fragment implements AsyncResponseMaps {
+
     private int request_count = 0;
     private String nextpagetoken = null;
-    private ListView listview ;
-    private ListViewAdapter adapter;
     private JsonMaps jsonMaps;
     private Result result;
+    private ListView listview ;
+    private ListViewAdapter adapter;
     private ArrayList<JsonMaps> jsonMapsPack = new ArrayList<JsonMaps>();
     private HashMap<String, String> searchParams;
     private OnMyListener mOnMyListener;
@@ -110,7 +112,6 @@ public class DetailFragment extends Fragment implements AsyncResponseDetail {
         n.execute(call);
     }
 
-/////////////onPostExecute 를 봐야할듯 delegate??
     @Override
     public void processFinish(Response<JsonMaps> response) { // getData()의 retrofit 요청이 완료되면 이 함수 실행
         if(response!=null) {
@@ -139,11 +140,6 @@ public class DetailFragment extends Fragment implements AsyncResponseDetail {
                 adapter.notifyDataSetChanged();
             }
         }
-    }
-
-    @Override
-    public void processFinish(Response<JsonDetail> response) {
-
     }
 
 

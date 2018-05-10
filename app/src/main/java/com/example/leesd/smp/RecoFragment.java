@@ -202,7 +202,7 @@ public class RecoFragment extends Fragment implements AsyncResponseMaps {
 				Fragment fr = new DetailFragment();
 				fr.setArguments(bundle); // transmit to DetailFragment
 
-				//change fragment
+				//change fragment, switchFragment is 'static method' (in MapsActivity)
 				FragmentManager fm = getFragmentManager();
 				FragmentTransaction fragmentTransaction = fm.beginTransaction();
 				fragmentTransaction.replace(R.id.view, fr);
@@ -486,11 +486,6 @@ public class RecoFragment extends Fragment implements AsyncResponseMaps {
 		
 		Log.d("RETROFIT_RESULTS", response.body().getResults().toString());
 		Log.d("RETROFIT_METADATA", response.toString());
-	}
-
-	@Override
-	public void processDetailFinish(Response<JsonDetail> response) {
-
 	}
 
 	private void googlePlaceSearch(HashMap<String, String> params) {
