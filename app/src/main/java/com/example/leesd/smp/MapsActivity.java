@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.example.leesd.smp.DetailSearch.JsonDetail;
@@ -44,8 +45,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 	private LatLng medianLatLng;            // median latlng (received from RecoFragment)
 
 
+	// static public void switchFragment(Fragment _fr, String fromTo) 에서 다룬다.
+	static FrameLayout recoFrameLayout; // RecoFragment를 담는 FrameLayout
+	static FrameLayout detailFrameLayout; // DetailFragment를 담는 FrameLayout
 	static Fragment fr;
-	static FragmentManager fm ; // 초기 RecoFragment인지, back을 통한 RecoFragment인지
+	static FragmentManager fm ;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -61,12 +65,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
 
+		recoFrameLayout = (FrameLayout)findViewById(R.id.recoView);
+		detailFrameLayout = (FrameLayout)findViewById(R.id.detailView);
+
+
 		// fragment load
 		fr = new RecoFragment();
 
 		fm = getFragmentManager();
 		FragmentTransaction fragmentTransaction = fm.beginTransaction();
-		fragmentTransaction.add(R.id.view, fr);
+		fragmentTransaction.add(R.id.recoView, fr);
 		fragmentTransaction.commit();
 		
 		/*
@@ -107,20 +115,23 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 		
 		map.animateCamera(CameraUpdateFactory.zoomTo(10));
 	}
-	
-	
-	static public void switchFragment(Fragment _fr, String fromTo) { // 프래그먼트 교체는 여기서 다 다룬다.
-		if(fromTo.equals("ToReco")){ // 기존에 있던 fragment 정보를 사용한다 ( new를 통한 새로운 생성 X)
 
-			FragmentTransaction fragmentTransaction = fm.beginTransaction();
-			fragmentTransaction.replace(R.id.view, fr);
-			fragmentTransaction.commit();
+	// 프래그먼트 교체는 여기서 다 다룬다. RecoFragmnet와 DetailFragment에서 쓴다.
+	// 프래그먼트 전환 메커니즘 : Reco -> Detail 시 새로운 Fragment를 만들어줌
+	//							  Detail -> Reco 시 기존에 있던 Fragment를 show
+	// 기존 프래그먼트 보존 메커니즘 : Fragment를 show 하는 frameLayout을 각각 만든 후, Visibility를 이용한다.
+	static public void switchFragment(Fragment _fr, String fromTo) {
+		if(fromTo.equals("ToReco")){ // 기존에 있던 fragment 정보를 사용한다 ( new를 통한 새로운 생성 X)
+			recoFrameLayout.setVisibility(View.VISIBLE);
+			detailFrameLayout.setVisibility(View.GONE);
 		}
 		else if(fromTo.equals("ToDetail")){
-
 			FragmentTransaction fragmentTransaction = fm.beginTransaction();
-			fragmentTransaction.replace(R.id.view, _fr);
+			fragmentTransaction.replace(R.id.detailView, _fr);
 			fragmentTransaction.commit();
+
+			recoFrameLayout.setVisibility(View.GONE);
+			detailFrameLayout.setVisibility(View.VISIBLE);
 		}
 	}
 
