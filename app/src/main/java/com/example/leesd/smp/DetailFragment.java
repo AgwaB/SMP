@@ -50,6 +50,7 @@ public class DetailFragment extends Fragment implements AsyncResponseMaps {
     private HashMap<String, String> searchParams;
     private OnMyListener mOnMyListener;
 
+
     public interface OnMyListener{ // fragment -> activity 통신을 위한 callback용 interface
         void onReceivedData(ArrayList<JsonMaps> data); // retrofit 통신 끝난 후, activity의 google map에 market를 찍어주기 위한 callback용 interface
         void onReceivedData(String name); // listview의 item 클릭 시, map에서 marker를 focusing하기 위한 callback용 interface
@@ -126,13 +127,13 @@ public class DetailFragment extends Fragment implements AsyncResponseMaps {
             searchParams.put("pagetoken", nextToken);
 
         // build retrofit object
-        DetailInfoService googlePlaceService = DetailInfoService.retrofit.create(DetailInfoService.class);
+        GooglePlaceService googlePlaceService = GooglePlaceService.retrofit.create(GooglePlaceService.class);
 
         // call GET request with category and HashMap params
-        Call<JsonDetail> call = googlePlaceService.getPlaces("nearbysearch", searchParams);
+        Call<JsonMaps> call = googlePlaceService.getPlaces("nearbysearch", searchParams);
 
         // make a thread for http communication
-        DetailInfoNetworkCall n = new DetailInfoNetworkCall();
+        GoogleMapsNetworkCall n = new GoogleMapsNetworkCall();
 
         // set delegate for receiving response object
         n.delegate = DetailFragment.this;
@@ -142,7 +143,7 @@ public class DetailFragment extends Fragment implements AsyncResponseMaps {
     }
 
     @Override
-    public void processFinish(Response<JsonDetail> response) { // getData()의 retrofit 요청이 완료되면 이 함수 실행
+    public void processFinish(Response<JsonMaps> response) { // getData()의 retrofit 요청이 완료되면 이 함수 실행
         if(response!=null) {
             jsonMaps = response.body();
             jsonMapsPack.add(jsonMaps);
