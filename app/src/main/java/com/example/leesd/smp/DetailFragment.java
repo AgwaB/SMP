@@ -70,10 +70,10 @@ public class DetailFragment extends Fragment implements AsyncResponseMaps {
         View view = inflater.inflate(R.layout.fragment_detail, container, false);
 
 
-        adapter = new ListViewAdapter();
-        fragmentBack = (Button)getActivity().findViewById(R.id.fragmentBack);
+        adapter      = new ListViewAdapter();
+        fragmentBack = getActivity().findViewById(R.id.fragmentBack);
 
-        listview = (ListView)view.findViewById(R.id.listview_showInformation);
+        listview = view.findViewById(R.id.listview_showInformation);
         listview.setAdapter(adapter);
 
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -104,7 +104,7 @@ public class DetailFragment extends Fragment implements AsyncResponseMaps {
         jsonMaps = null;
         result = null;
 
-        result = (Result)getArguments().getSerializable("station"); // get data from RecoFragment
+        result = (Result)getArguments().getSerializable("RESULT_STATION"); // get data from RecoFragment
 
         getData(result.getGeometry().getLocation().getLat(), result.getGeometry().getLocation().getLng(), null);
 

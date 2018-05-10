@@ -21,6 +21,7 @@ import com.example.leesd.smp.RetrofitCall.GoogleMapsNetworkCall;
 import com.example.leesd.smp.RetrofitCall.GooglePlaceService;
 import com.example.leesd.smp.googlemaps.JsonMaps;
 
+import com.example.leesd.smp.googlemaps.Result;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -28,13 +29,14 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import retrofit2.Call;
 import retrofit2.Response;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, DetailFragment.OnMyListener {
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, DetailFragment.OnMyListener, StationsFragment.OnStationsFragmentListener {
 
     private GoogleMap map;
     private Button fragmentChange;
@@ -59,16 +61,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         fragmentChange = (Button)findViewById(R.id.fragmentBack);
 
-		recoFrameLayout = (FrameLayout)findViewById(R.id.recoView);
-		detailFrameLayout = (FrameLayout)findViewById(R.id.detailView);
+//		recoFrameLayout = (FrameLayout)findViewById(R.id.recoView);
+//		detailFrameLayout = (FrameLayout)findViewById(R.id.detailView);
 
 
 		// fragment load
 		fr = new RecoFragment();
-
 		fm = getFragmentManager();
 		FragmentTransaction fragmentTransaction = fm.beginTransaction();
-		fragmentTransaction.add(R.id.recoView, fr);
+		fragmentTransaction.add(R.id.fragment_view, fr);
 		fragmentTransaction.commit();
 		
 		/*
@@ -115,18 +116,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 	//							  Detail -> Reco 시 기존에 있던 Fragment를 show
 	// 기존 프래그먼트 보존 메커니즘 : Fragment를 show 하는 frameLayout을 각각 만든 후, Visibility를 이용한다.
 	static public void switchFragment(Fragment _fr, String fromTo) {
-		if(fromTo.equals("ToReco")){ // 기존에 있던 fragment 정보를 사용한다 ( new를 통한 새로운 생성 X)
-			recoFrameLayout.setVisibility(View.VISIBLE);
-			detailFrameLayout.setVisibility(View.GONE);
-		}
-		else if(fromTo.equals("ToDetail")){
-			FragmentTransaction fragmentTransaction = fm.beginTransaction();
-			fragmentTransaction.replace(R.id.detailView, _fr);
-			fragmentTransaction.commit();
+//		if(fromTo.equals("ToReco")){ // 기존에 있던 fragment 정보를 사용한다 ( new를 통한 새로운 생성 X)
+//			recoFrameLayout.setVisibility(View.VISIBLE);
+//			detailFrameLayout.setVisibility(View.GONE);
+//		}
+//		else if(fromTo.equals("ToDetail")){
+//			FragmentTransaction fragmentTransaction = fm.beginTransaction();
+//			fragmentTransaction.replace(R.id.detailView, _fr);
+//			fragmentTransaction.commit();
+//
+//			recoFrameLayout.setVisibility(View.GONE);
+//			detailFrameLayout.setVisibility(View.VISIBLE);
+//		}W
 
-			recoFrameLayout.setVisibility(View.GONE);
-			detailFrameLayout.setVisibility(View.VISIBLE);
-		}
+		FragmentTransaction tx = fm.beginTransaction();
+		tx.replace(R.id.fragment_view, _fr).addToBackStack(null).commit();
 	}
 
 	@Override
@@ -160,15 +164,23 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
-	// receive median latlng from RecoFragment
-	public void onReceivedData(Object data) {
-		//DETERMINE WHO STARTED THIS ACTIVITY
-//			Toast.makeText(this, "Received", Toast.LENGTH_SHORT).show();
-		medianLatLng = (LatLng) data;
-		
-		MarkerOptions markerOptions = new MarkerOptions();
-		markerOptions.position(medianLatLng);
-		map.addMarker(markerOptions);
+	// receive median latlng from StationsFragment
+	public void onReceivedResults(ArrayList<Result> results) {
+		MarkerOptions markerOptions;
+		LatLng latLng; // marker 위치map.clear();
+		if(results != null) { // only mark when data exist
+			for (int x = 0; x < results.size(); x++) {
+				markerOptions = new MarkerOptions();
+				for (int i = 0; i < results.size(); i++) { // marker정보 받아와서 nearbyMarker 에 넣어주기
+					latLng = new LatLng(results.get(i).getGeometry().getLocation().getLat(), results.get(i).getGeometry().getLocation().getLng());
+					markerOptions.position(latLng) // 위치 set
+							.title(results.get(i).getName()); // 이름 set
+					map.addMarker(markerOptions); // 지도에 marker 추가
+
+					nearbyMarker.add(markerOptions); // marker 저장
+				}
+			}
+		}
 	}
 
 }
