@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -101,8 +102,7 @@ public class RecoFragment extends Fragment implements AsyncResponseMaps {
 	LatLng medianLatlng;
 	
 	private ArrayList<ArrayList<JsonMaps>> jsonMapsResults;
-	
-	
+
 	//[0 : none,
 	// QUIET 10: cafe, 11: library
 	// ACTIVITY 20: park, 21: art_gallery, 22: bowling_alley

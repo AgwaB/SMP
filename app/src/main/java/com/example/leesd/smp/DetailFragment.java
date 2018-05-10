@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ListView;
 
 import com.example.leesd.smp.DetailSearch.JsonDetail;
@@ -27,7 +28,6 @@ import java.util.HashMap;
 import retrofit2.Call;
 import retrofit2.Response;
 
-import static com.example.leesd.smp.MapsActivity.frChangefCheck;
 import static com.example.leesd.smp.MapsActivity.switchFragment;
 
 /**
@@ -68,8 +68,6 @@ public class DetailFragment extends Fragment implements AsyncResponseMaps {
 
 
         adapter = new ListViewAdapter();
-
-
         fragmentBack = (Button)getActivity().findViewById(R.id.fragmentBack);
 
         listview = (ListView)view.findViewById(R.id.listview_showInformation);
@@ -89,11 +87,13 @@ public class DetailFragment extends Fragment implements AsyncResponseMaps {
             @Override
             public void onClick(View v) {
                 fragmentBack.setVisibility(View.GONE);
-                Fragment fr = new RecoFragment();
-                frChangefCheck = true;
-                switchFragment(fr, "ToReco");
+                switchFragment(null, "ToReco");
             }
         });
+
+        nextpagetoken = null;
+        jsonMaps = null;
+        result = null;
 
         result = (Result)getArguments().getSerializable("station"); // get data from RecoFragment
 
