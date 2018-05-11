@@ -106,6 +106,7 @@ public class StationsFragment extends Fragment implements AsyncResponseMaps {
         // ARRAYLIST_RESULT_STATIONS
         // MEDIAN_LATLNG_POSITION
 
+        // get arguments from previous fragment
         if (getArguments() != null) {
             senderTag = getArguments().getString("SENDER");
             if(senderTag.equals(RecoFragment.class.getSimpleName())){
@@ -124,40 +125,42 @@ public class StationsFragment extends Fragment implements AsyncResponseMaps {
             stationsListViewAdapter.notifyDataSetChanged();
 
             mListener.onReceivedResults(stations);
-
         }
 
 
-
+        // search the stations
         if(senderTag.equals(RecoFragment.class.getSimpleName())){
-            String location = medianPosition.latitude+","+medianPosition.longitude;
-            getNearByPlacesWithType(null, location, STATION);
+//            String location = medianPosition.latitude+","+medianPosition.longitude;
+            for(int index = 0; index < stations.size(); index++){
+                Result station = stations.get(index);
+                String location = station.getGeometry().getLocation().getLat() + "," +
+                        station.getGeometry().getLocation().getLng();	// string with location
+                int stationId = index;
+                getNearByPlacesWithType(stationId, location, STATION);
+            }
 
         }
 
         if(senderTag.equals(HotPlaceButtonFragment.class.getSimpleName())){
             for (int index = 0; index < stations.size(); index++) {
                 Result station = stations.get(index);
-                String queryLocation = station.getGeometry().getLocation().getLat() + "," +
+                String location = station.getGeometry().getLocation().getLat() + "," +
                         station.getGeometry().getLocation().getLng();	// string with location
                 int stationId = index;
 
                 if(placeType.equals("QUIET")){
-
-                    getNearByPlacesWithType(stationId, queryLocation, CAFE);
-                    getNearByPlacesWithType(stationId, queryLocation, LIBRARY);
+                    getNearByPlacesWithType(stationId, location, CAFE);
+                    getNearByPlacesWithType(stationId, location, LIBRARY);
 
                 } else if(placeType.equals("ACTIVITY")){
-
-                    getNearByPlacesWithType(stationId, queryLocation, PARK);
-                    getNearByPlacesWithType(stationId, queryLocation, BOWLING_ALLEY);
-                    getNearByPlacesWithType(stationId, queryLocation, ART_GALLERY);
+                    getNearByPlacesWithType(stationId, location, PARK);
+                    getNearByPlacesWithType(stationId, location, BOWLING_ALLEY);
+                    getNearByPlacesWithType(stationId, location, ART_GALLERY);
 
                 } else if(placeType.equals("PLAY")){
-
-                    getNearByPlacesWithType(stationId, queryLocation, BAR);
-                    getNearByPlacesWithType(stationId, queryLocation, DEPARTMENT_STORE);
-                    getNearByPlacesWithType(stationId, queryLocation, MOVIE_THEATER);
+                    getNearByPlacesWithType(stationId, location, BAR);
+                    getNearByPlacesWithType(stationId, location, DEPARTMENT_STORE);
+                    getNearByPlacesWithType(stationId, location, MOVIE_THEATER);
 
                 }
 
@@ -182,8 +185,11 @@ public class StationsFragment extends Fragment implements AsyncResponseMaps {
 
                 //change fragment, switchFragment is 'static method' (in MapsActivity)
                 FragmentManager fm = getFragmentManager();
-                FragmentTransaction tx = fm.beginTransaction();
-                tx.replace(R.id.fragment_view, fr).addToBackStack(null).commit();
+                fm.beginTransaction()//;
+                //tx.replace(R.id.fragment_view, fr)
+                        .detach(StationsFragment.this)
+                        .addToBackStack(null)
+                        .commit();
             }
         });
 

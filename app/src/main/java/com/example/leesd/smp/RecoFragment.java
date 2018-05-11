@@ -111,8 +111,11 @@ public class RecoFragment extends Fragment implements AsyncResponseMaps {
 				Fragment fr = new StationsFragment();
 				fr.setArguments(bundle);
 				FragmentManager fm = getFragmentManager();
-				FragmentTransaction fragmentTransaction = fm.beginTransaction();
-				fragmentTransaction.add(R.id.fragment_view, fr).addToBackStack(null).commit();
+				fm.beginTransaction()
+						.detach(RecoFragment.this)
+						.add(R.id.fragment_view, fr)
+						.addToBackStack(null)
+						.commit();
 
 			}
 		});
@@ -135,7 +138,10 @@ public class RecoFragment extends Fragment implements AsyncResponseMaps {
 				fr.setArguments(bundle);
 				FragmentManager fm = getFragmentManager();
 				FragmentTransaction fragmentTransaction = fm.beginTransaction();
-				fragmentTransaction.add(R.id.fragment_view, fr).addToBackStack(null).commit();
+				fragmentTransaction.add(R.id.fragment_view, fr)
+						.detach(RecoFragment.this)
+						.addToBackStack(null)
+						.commit();
 
 			}
 		});

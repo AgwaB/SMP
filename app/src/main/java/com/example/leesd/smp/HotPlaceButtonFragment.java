@@ -88,8 +88,11 @@ public class HotPlaceButtonFragment extends Fragment {// implements AsyncRespons
                 Fragment fr = new StationsFragment();
                 fr.setArguments(bundle);
                 FragmentManager fm = getFragmentManager();
-                FragmentTransaction fragmentTransaction = fm.beginTransaction();
-                fragmentTransaction.add(R.id.fragment_view, fr).addToBackStack(null).commit();
+                fm.beginTransaction()
+                        .detach(HotPlaceButtonFragment.this)
+                        .add(R.id.fragment_view, fr)
+                        .addToBackStack(null)
+                        .commit();
 
             }
         });
@@ -109,8 +112,11 @@ public class HotPlaceButtonFragment extends Fragment {// implements AsyncRespons
                 Fragment fr = new StationsFragment();
                 fr.setArguments(bundle);
                 FragmentManager fm = getFragmentManager();
-                FragmentTransaction fragmentTransaction = fm.beginTransaction();
-                fragmentTransaction.add(R.id.fragment_view, fr).addToBackStack(null).commit();
+                fm.beginTransaction()
+                        .detach(HotPlaceButtonFragment.this)
+                        .add(R.id.fragment_view, fr)
+                        .addToBackStack(null)
+                        .commit();
             }
         });
 
@@ -127,8 +133,11 @@ public class HotPlaceButtonFragment extends Fragment {// implements AsyncRespons
                 Fragment fr = new StationsFragment();
                 fr.setArguments(bundle);
                 FragmentManager fm = getFragmentManager();
-                FragmentTransaction fragmentTransaction = fm.beginTransaction();
-                fragmentTransaction.add(R.id.fragment_view, fr).addToBackStack(null).commit();
+                fm.beginTransaction()
+                        .detach(HotPlaceButtonFragment.this)
+                        .add(R.id.fragment_view, fr)
+                        .addToBackStack(null)
+                        .commit();
 
             }
         });
