@@ -1,44 +1,119 @@
 package com.example.leesd.smp;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
+import java.io.Serializable;
+
 public class LocateInfo {
+
+    @SerializedName("placeTitle")
+    @Expose
     private String placeTitle;
+    @SerializedName("placeLocation")
+    @Expose
     private CharSequence placeLocation;
-    public Double placeLatitude, placeLongitude;
+    @SerializedName("placeLatitude")
+    @Expose
+    public Double placeLatitude;
+    @SerializedName("placeLongitude")
+    @Expose
+    public Double placeLongitude;
+    @SerializedName("placeID")
+    @Expose
     public String placeID;
 
 
-    //setter
-    public void setTitle(String title) {
-        placeTitle = title;
-    }
-    public void setLocation(CharSequence location) {
-        placeLocation = location;
-    }
-    public void setLatitude(double latitude) {
-        placeLatitude = latitude;
-    }
-    public void setLongitude(double longitude) {
-        placeLongitude = longitude;
-    }
-    public void setID(String id) {
-        placeID = id;
+
+    /**
+     *
+     * @param placeTitle
+     * The placeTitle
+     */
+    public void setTitle(String placeTitle) {
+        this.placeTitle = placeTitle;
     }
 
-    //getter
+    /**
+     *
+     * @param placeLocation
+     * The placeLocation
+     */
+    public void setLocation(CharSequence placeLocation) {
+        this.placeLocation = placeLocation;
+    }
+
+    /**
+     *
+     * @param placeLatitude
+     * The placeLatitude
+     */
+    public void setLatitude(double placeLatitude) {
+        this.placeLatitude = placeLatitude;
+    }
+
+    /**
+     *
+     * @param placeLongitude
+     * The placeLongitude
+     */
+    public void setLongitude(double placeLongitude) {
+        this.placeLongitude = placeLongitude;
+    }
+
+    /**
+     *
+     * @param placeID
+     * The placeID
+     */
+    public void setID(String placeID) {
+        this.placeID = placeID;
+    }
+
+
+    /**
+     *
+     * @return
+     * The placeTitle
+     */
     public String getTitle() {
-        return this.placeTitle;
+        return placeTitle;
     }
+
+    /**
+     *
+     * @return
+     * The placeLocation
+     */
     public CharSequence getLocation() {
-        return this.placeLocation;
+        return placeLocation;
     }
+
+    /**
+     *
+     * @return
+     * The placeLatitude
+     */
     public double getLatitude() {
-        return this.placeLatitude;
+        return placeLatitude;
     }
+
+    /**
+     *
+     * @return
+     * The placeLongitude
+     */
     public double getLongitude() {
-        return this.placeLongitude;
+        return placeLongitude;
     }
+
+    /**
+     *
+     * @return
+     * The placeID
+     */
     public String getID() {
-        return this.placeID;
+        return placeID;
     }
 
 }
