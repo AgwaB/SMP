@@ -41,6 +41,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private GoogleMap map;
     private Button fragmentChange;
     private ArrayList<MarkerOptions> nearbyMarker = new ArrayList<MarkerOptions>();
+	private ArrayList<MarkerOptions> stationMarker = new ArrayList<MarkerOptions>();
     private boolean isFragmentChange = true ;
     private HashMap<String, String> searchParams;
     private ArrayList<JsonMaps> jsonMapsPack; // DetailFragment에서 주변 정보들을 받아 온 뒤, callback method를 통해 이 변수로 넣어준다.
@@ -142,8 +143,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 		if(data != null) { // only mark when data exist
 			for (int x = 0; x < jsonMapsPack.size(); x++) {
-				markerOptions = new MarkerOptions();
 				for (int i = 0; i < jsonMapsPack.get(x).getResults().size(); i++) { // marker정보 받아와서 nearbyMarker 에 넣어주기
+					markerOptions = new MarkerOptions();
 					latLng = new LatLng(jsonMapsPack.get(x).getResults().get(i).getGeometry().getLocation().getLat(), jsonMapsPack.get(x).getResults().get(i).getGeometry().getLocation().getLng());
 					markerOptions.position(latLng) // 위치 set
 							.title(jsonMapsPack.get(x).getResults().get(i).getName()); // 이름 set
@@ -170,14 +171,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 		LatLng latLng; // marker 위치map.clear();
 		if(results != null) { // only mark when data exist
 			for (int x = 0; x < results.size(); x++) {
-				markerOptions = new MarkerOptions();
 				for (int i = 0; i < results.size(); i++) { // marker정보 받아와서 nearbyMarker 에 넣어주기
+					markerOptions = new MarkerOptions();
 					latLng = new LatLng(results.get(i).getGeometry().getLocation().getLat(), results.get(i).getGeometry().getLocation().getLng());
 					markerOptions.position(latLng) // 위치 set
 							.title(results.get(i).getName()); // 이름 set
 					map.addMarker(markerOptions); // 지도에 marker 추가
 
-					nearbyMarker.add(markerOptions); // marker 저장
+					stationMarker.add(markerOptions); // marker 저장
 				}
 			}
 		}
