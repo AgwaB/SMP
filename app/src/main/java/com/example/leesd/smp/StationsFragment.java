@@ -96,7 +96,7 @@ public class StationsFragment extends Fragment implements AsyncResponseMaps {
         stations	 = stationsListViewAdapter.stations;			// set station list for listview
         stationsView = view.findViewById(R.id.stations_list);	// get listview
         stationsView.setAdapter(stationsListViewAdapter);			// set listview adapter
-
+        
         return view;
     }
 
@@ -105,6 +105,8 @@ public class StationsFragment extends Fragment implements AsyncResponseMaps {
         // ARRAYLIST_LATLNG_POSITIONS
         // ARRAYLIST_RESULT_STATIONS
         // MEDIAN_LATLNG_POSITION
+        
+        stations.clear();
 
         if (getArguments() != null) {
             senderTag = getArguments().getString("SENDER");
@@ -225,7 +227,7 @@ public class StationsFragment extends Fragment implements AsyncResponseMaps {
         searchParams.put("type", queryType);           		// type of places
         searchParams.put("language", "ko");             	// language
         searchParams.put("key", getString(R.string.api));   // api key
-
+        
         googlePlaceSearch(searchParams);    // search network call
     }
 

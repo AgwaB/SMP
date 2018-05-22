@@ -1,6 +1,7 @@
 package com.example.leesd.smp.RetrofitCall;
 
 import android.os.AsyncTask;
+import android.os.Debug;
 import android.util.Log;
 
 import com.example.leesd.smp.googlemaps.JsonMaps;
@@ -37,6 +38,11 @@ public class GoogleMapsNetworkCall extends AsyncTask<Call, Void, Response<JsonMa
         // call if doInBackground returns response or null
         
         // send a response object to activity
-        delegate.processFinish(response);
+        try{
+            delegate.processFinish(response);
+        } catch(IllegalStateException e){
+            Log.e("FRAGMENT_STATE_ERROR", e.getMessage());
+        }
+        
     }
 }
